@@ -5,7 +5,7 @@
 
 
 
-void pwm(double pourcentage, double freq){
+void setPwm(double pourcentage, double freq){
 const float TEMPS_UNITAIRE=0.1;
 unsigned b = 1/freq;
 unsigned a=pourcentage*b/100;

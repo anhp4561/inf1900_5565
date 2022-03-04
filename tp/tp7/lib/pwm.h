@@ -12,7 +12,7 @@ class pwm
 {
 public:
 
-   pwm();
+   setPwm();
    
 
 private:
