@@ -2,10 +2,7 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 
-
-
-
-void setPwm(double pourcentage, double freq){
+void pwm::setPwm(double pourcentage, double freq){
 const float TEMPS_UNITAIRE=0.1;
 unsigned b = 1/freq;
 unsigned a=pourcentage*b/100;
@@ -22,7 +19,7 @@ unsigned nbPeriodes = unsigned(TEMPS_D_ACTIVITE_Second/b);
 }
 
 // Initialisation du Timer0 pour generer du PWM
-void initialisationTimerPwm()
+void pwm::initialisationTimerPwm()
 {
     cli();
     DDRB |= (1 << PB2) | (1 << PB3);
