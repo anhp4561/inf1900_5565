@@ -19,3 +19,11 @@ void transmissionUART ( uint8_t donnee ) {
     /* Put data into buffer, sends the data */
     UDR0 = donnee;
 }
+
+unsigned char USART_Receive( void )
+{
+/* Wait for empty transmit buffer */
+while ( !(UCSR0A & (1<<RXC0)) );
+/* Get and return received data from buffer */
+return UDR0;
+}
