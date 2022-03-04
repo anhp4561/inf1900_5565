@@ -8,7 +8,8 @@ const uint8_t ROUGE = 0x02;
 const uint8_t VERT = 0x01;
 const uint8_t ETEINT = 0x00;
 const double ATTENTE_AMBRE = 0.5;
-uint8_t port = 1;
+char port = "A";
+
 
 void choisirPort(char port)
 {
@@ -74,7 +75,6 @@ void ambre(uint8_t pin) // allumer la led en ambré
     }
 }
 
-private
 void allumerLed(uint8_t couleur, uint8_t pin)
 {
     switch (port)
