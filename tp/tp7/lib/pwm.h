@@ -13,6 +13,7 @@ class pwm
 public:
 
    setPwm();
+   void initialisationTimerPwm();
    
 
 private:
