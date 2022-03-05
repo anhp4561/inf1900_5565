@@ -7,7 +7,7 @@ class Led {
 
         void allumerVertLed();
 
-        void allumerAmbreLed();
+        void allumerAmbreLed(int nIterations);
         
         void eteindreLed();
 
