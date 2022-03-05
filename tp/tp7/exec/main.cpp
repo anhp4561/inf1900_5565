@@ -2,20 +2,20 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include "Led.h"
+#include "Bouton.h"
 
 // tester la fonction LED 
 int main() {
     DDRA = 0xff;
-    Led test (&PORTA,0,1);
-    int nIterations = 2000;
+    Led led (&PORTA,0,1);
+    Bouton bouton (&PIND,2);
+
     while (true){
-        test.allumerRougeLed();
-        _delay_ms(2000);
-        test.allumerVertLed();
-        _delay_ms(2000);
-        test.allumerAmbreLed(nIterations);
-        test.eteindreLed();
-        _delay_ms(2000);
+        if (bouton.estBoutonPressePullDown())
+            led.allumerRougeLed();
+        
+        else 
+            led.allumerVertLed();
     } 
 }
 
