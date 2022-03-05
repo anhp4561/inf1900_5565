@@ -8,7 +8,7 @@ Bouton::Bouton (volatile uint8_t *pin, int boutonPin){
     boutonPin_ = boutonPin;
 }
 
-bool Bouton::estBoutonPressePullDown(){
+bool Bouton::estBoutonPresseRappel(){
     uint8_t rebond = 10;
     uint8_t masque = (1 << boutonPin_);
     if (*pin_ & masque){
@@ -18,6 +18,6 @@ bool Bouton::estBoutonPressePullDown(){
     return false;
 }
 
-bool Bouton::estBoutonPressePullUp(){
-    return !(estBoutonPressePullDown());
+bool Bouton::estBoutonPresseTirage(){
+    return !(estBoutonPresseRappel());
 }

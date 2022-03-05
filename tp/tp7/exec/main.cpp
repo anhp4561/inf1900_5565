@@ -11,7 +11,7 @@ int main() {
     Bouton bouton (&PIND,2);
 
     while (true){
-        if (bouton.estBoutonPressePullDown())
+        if (bouton.estBoutonPresseRappel())
             led.allumerRougeLed();
         
         else 

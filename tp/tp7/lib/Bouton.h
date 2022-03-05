@@ -6,12 +6,12 @@ class Bouton {
         // Pour les boutons poussoirs qui utilisent un pull-down resistor
         // comme le bouton a usage general sur la carte mere
         // Si le bouton est presse, on lit la valeur "1" sur le pin, sinon "0"
-        bool estBoutonPressePullDown();
+        bool estBoutonPresseRappel();
 
         // Pour les boutons poussoirs qui utilisent un pull-up resistor
         // comme le bouton utilise au tp6
         // Si le bouton est presse, on lit la valeur "0" sur le pin, sinon "1"
-        bool estBoutonPressePullUp();
+        bool estBoutonPresseTirage();
 
     private:
         // Cet attribut est la PINX qu'on va lire
