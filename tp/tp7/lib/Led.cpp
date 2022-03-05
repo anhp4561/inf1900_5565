@@ -4,19 +4,19 @@
 #include <util/delay.h>
 const uint8_t AMBRE_DELAI = 5;
 
-Led::Led (volatile uint8_t *port, int premierPin, int deuxiemePin){
+Led::Led (volatile uint8_t *port, int LedPin1, int LedPin2){
     port_ = port;
-    premierPin_ = premierPin;
-    deuxiemePin_ = deuxiemePin;
+    LedPin1_ = LedPin1;
+    LedPin2_ = LedPin2;
 }
 void Led::allumerRougeLed (){
-    *port_ &= ~(1<<premierPin_ | 1<<deuxiemePin_);
-    *port_ |= 1 << premierPin_;
+    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
+    *port_ |= 1 << LedPin1_;
 }
 
 void Led::allumerVertLed(){
-    *port_ &= ~(1<<premierPin_ | 1<<deuxiemePin_);
-    *port_ |= 1 << deuxiemePin_;
+    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
+    *port_ |= 1 << LedPin2_;
 
 }
 void Led::allumerAmbreLed(int nIterations){
@@ -30,6 +30,6 @@ void Led::allumerAmbreLed(int nIterations){
 }
 
 void Led::eteindreLed(){
-    *port_ &= ~(1<<premierPin_ | 1<<deuxiemePin_);
+    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
 }
 

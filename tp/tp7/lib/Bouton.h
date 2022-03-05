@@ -14,6 +14,11 @@ class Bouton {
         bool estBoutonPressePullUp();
 
     private:
+        // Cet attribut est la PINX qu'on va lire
         volatile uint8_t* pin_;
+        // Cet attribut est le PXY qu'on va lire
         int boutonPin_;
+
+        // Exemple de construction : On veut lire la valeur 2 sur PIND
+        // PIND sera pin_ et 2 sera boutonPin_
 };
