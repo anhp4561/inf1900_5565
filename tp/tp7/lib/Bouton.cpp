@@ -6,9 +6,10 @@
 Bouton::Bouton (volatile uint8_t *pin, int boutonPin){
     pin_ = pin;
     boutonPin_ = boutonPin;
+    etat_ = Etat::AUCUN;
 }
 
-bool Bouton::estBoutonPressePullDown(){
+bool Bouton::estBoutonPresseRappel(){
     uint8_t rebond = 10;
     uint8_t masque = (1 << boutonPin_);
     if (*pin_ & masque){
@@ -18,6 +19,37 @@ bool Bouton::estBoutonPressePullDown(){
     return false;
 }
 
-bool Bouton::estBoutonPressePullUp(){
-    return !(estBoutonPressePullDown());
+
+void Bouton::actualiserEtat() {
+    switch (etat_)
+    {
+    case Etat::AUCUN:
+        if (estBoutonPresseRappel()) {
+            etat_ = Etat::PRESSE;
+        }
+        break;
+    case Etat::PRESSE:
+        if (estBoutonPresseRappel()) {
+            etat_ = Etat::MAINTENU;
+        } else {
+            etat_ = Etat::RELACHE;
+        }
+        break;
+    case Etat::MAINTENU:
+        if (!estBoutonPresseRappel()) {
+            etat_ = Etat::RELACHE;
+        }
+        break;
+    case Etat::RELACHE:
+        if (estBoutonPresseRappel()) {
+            etat_ = Etat::PRESSE;
+        } else {
+            etat_ = Etat::AUCUN;
+        }
+        break;
+    }
+}
+
+bool Bouton::estBoutonPresseTirage(){
+    return !(estBoutonPresseRappel());
 }
