@@ -5,8 +5,8 @@
 
 // tester la fonction LED 
 int main() {
-    DDRB = 0xff;
-    Led test (&PORTB,6,7);
+    DDRA = 0xff;
+    Led test (&PORTA,0,1);
     int nIterations = 2000;
     while (true){
         test.allumerRougeLed();
