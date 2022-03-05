@@ -7,6 +7,18 @@ Bouton::Bouton (volatile uint8_t *pin, int boutonPin){
     pin_ = pin;
     boutonPin_ = boutonPin;
     etat_ = Etat::AUCUN;
+    // Justification pour la suite de if : switch case ne permettait pas d'utiliser pin comme parametre
+    if (pin_ == &PINA)
+        DDRA &= ~(1<< boutonPin_);
+
+    else if (pin_ == &PINB)
+        DDRB &= ~(1<< boutonPin_);
+
+    else if (pin_ == &PINC)
+        DDRC &= ~(1<< boutonPin_);
+    
+    else if (pin_ == &PIND)
+        DDRD &= ~(1<< boutonPin_);
 }
 
 bool Bouton::estBoutonPresseRappel(){

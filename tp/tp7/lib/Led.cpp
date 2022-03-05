@@ -4,19 +4,31 @@
 #include <util/delay.h>
 const uint8_t AMBRE_DELAI = 5;
 
-Led::Led (volatile uint8_t *port, int LedPin1, int LedPin2){
+Led::Led (volatile uint8_t *port, int ledPin1, int ledPin2){
     port_ = port;
-    LedPin1_ = LedPin1;
-    LedPin2_ = LedPin2;
+    ledPin1_ = ledPin1;
+    ledPin2_ = ledPin2;
+    // Justification pour la suite de if : switch case ne permettait pas d'utiliser port_ comme parametre
+    if (port_ == &PORTA)
+        DDRA |= (1<< ledPin1_) | (1<< ledPin2_);
+    
+    else if (port_ == &PORTB)
+        DDRB |= (1<< ledPin1_) | (1<< ledPin2_);
+
+    else if (port_ == &PORTC)
+        DDRC |= (1<< ledPin1_) | (1<< ledPin2_);
+    
+    else if (port_ == &PORTD)
+        DDRD |= (1<< ledPin1_) | (1<< ledPin2_);
 }
 void Led::allumerRougeLed (){
-    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
-    *port_ |= 1 << LedPin1_;
+    *port_ &= ~(1<<ledPin1_ | 1<<ledPin2_);
+    *port_ |= 1 << ledPin1_;
 }
 
 void Led::allumerVertLed(){
-    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
-    *port_ |= 1 << LedPin2_;
+    *port_ &= ~(1<<ledPin1_ | 1<<ledPin2_);
+    *port_ |= 1 << ledPin2_;
 
 }
 void Led::allumerAmbreLed(int nIterations){
@@ -30,6 +42,6 @@ void Led::allumerAmbreLed(int nIterations){
 }
 
 void Led::eteindreLed(){
-    *port_ &= ~(1<<LedPin1_ | 1<<LedPin2_);
+    *port_ &= ~(1<<ledPin1_ | 1<<ledPin2_);
 }
 

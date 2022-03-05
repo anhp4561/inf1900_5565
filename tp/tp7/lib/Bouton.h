@@ -31,5 +31,6 @@ class Bouton {
         int boutonPin_;
         // Exemple de construction : On veut lire la valeur 2 sur PIND
         // PIND sera pin_ et 2 sera boutonPin_
+
         Etat etat_;
 };
