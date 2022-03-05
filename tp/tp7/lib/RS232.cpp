@@ -1,3 +1,4 @@
+#include "RS232.h"
 void initialisationUART ( void ) {
     // 2400 bauds. Nous vous donnons la valeur des deux
     // premiers registres pour vous éviter des complications.
@@ -14,7 +15,7 @@ void initialisationUART ( void ) {
 // Du USART vers le PC
 void transmissionUART ( uint8_t donnee ) {
     /* Wait for empty transmit buffer */
-    while ( !( UCSR0A & (1<<UDRE0)) )
+    while ( !( UCSR0A & (1<<UDRE0)))
     ;
     /* Put data into buffer, sends the data */
     UDR0 = donnee;
@@ -23,7 +24,7 @@ void transmissionUART ( uint8_t donnee ) {
 unsigned char USART_Receive( void )
 {
 /* Wait for empty transmit buffer */
-while ( !(UCSR0A & (1<<RXC0)) );
+while ( !(UCSR0A & (1<<RXC0)));
 /* Get and return received data from buffer */
 return UDR0;
 }
