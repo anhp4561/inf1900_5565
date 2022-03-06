@@ -6,8 +6,8 @@
 
 // tester la fonction LED 
 int main() {
-    DDRA = 0x00; // pour verifier si a la construction on modifie bien le registre de direction
-    DDRD = 0xff; // pour verifier si a la construction on modifie bien le registre de direction
+    //DDRA = 0x00; // pour verifier si a la construction on modifie bien le registre de direction
+    //DDRD = 0xff; // pour verifier si a la construction on modifie bien le registre de direction
     Led led (&PORTA,0,1);
     Bouton bouton (&PIND,2);
 

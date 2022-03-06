@@ -7,7 +7,7 @@ Bouton::Bouton (volatile uint8_t *pin, int boutonPin){
     pin_ = pin;
     boutonPin_ = boutonPin;
     etat_ = Etat::AUCUN;
-    // Justification pour la suite de if : switch case ne permettait pas d'utiliser pin comme parametre
+    // Justification pour la suite de if : switch case ne permettait pas d'utiliser pin_ comme parametre
     if (pin_ == &PINA)
         DDRA &= ~(1<< boutonPin_);
 
@@ -22,7 +22,7 @@ Bouton::Bouton (volatile uint8_t *pin, int boutonPin){
 }
 
 bool Bouton::estBoutonPresseRappel(){
-    uint8_t rebond = 10;
+    uint8_t rebond = 30;
     uint8_t masque = (1 << boutonPin_);
     if (*pin_ & masque){
         _delay_ms(rebond);
