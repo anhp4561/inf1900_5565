@@ -29,11 +29,7 @@ PROJECTNAME=test
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-<<<<<<< HEAD
-PRJSRC= RS232.cpp
-=======
-PRJSRC= Led.cpp Bouton.cpp
->>>>>>> 5167a067fda0ddf717647e166229751f6f58c700
+PRJSRC= RS232.cpp Led.cpp Bouton.cpp Moteur.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
 INC= -I $(exec_dir)
