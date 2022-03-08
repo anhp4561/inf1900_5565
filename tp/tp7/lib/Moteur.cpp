@@ -47,10 +47,8 @@ void Moteur::arreterMoteur(){
 }
 
 void Moteur::reglerVitesseMoteur(int pourcentageOC0A, int pourcentageOC0B){ 
-    double pourcentage1 = pourcentageOC0A / 100.0;
-    double pourcentage2 = pourcentageOC0B / 100.0;
-    OCR0A = 254 * pourcentage1; 
-    OCR0B = 254 * pourcentage2;
+    OCR0A = 254 * pourcentageOC0A / 100; 
+    OCR0B = 254 * pourcentageOC0B / 100;
 }
 
 
