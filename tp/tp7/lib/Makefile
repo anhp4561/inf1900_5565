@@ -41,9 +41,9 @@ LIBS=
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
 OPTLEVEL=s
 
-# Programmer ID - Ne pas changer 
-# Liste complete des IDs disponible avec avrdude
-AVRDUDE_PROGRAMMERID=usbasp
+# # Programmer ID - Ne pas changer 
+# # Liste complete des IDs disponible avec avrdude
+# AVRDUDE_PROGRAMMERID=usbasp
 
 
 
@@ -65,12 +65,12 @@ CC=avr-gcc
 AR = ar
 #pour copier le contenu d'un fichier objet vers un autre
 OBJCOPY=avr-objcopy
-#pour permettre le transfert vers le microcontroleur
-AVRDUDE=avrdude
+# #pour permettre le transfert vers le microcontroleur
+# AVRDUDE=avrdude
 #pour supprimer les fichiers lorsque l'on appel make clean
 REMOVE=rm -f
 # HEXFORMAT -- format pour les fichiers produient .hex
-HEXFORMAT=ihex
+# HEXFORMAT=ihex
 # path vers le sous-repertoire exec
 exec_dir = ../exec
 
