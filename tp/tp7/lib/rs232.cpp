@@ -1,4 +1,4 @@
-#include "RS232.h"
+#include "rs232.h"
 void initialisationUART() {
     // 2400 bauds. Nous vous donnons la valeur des deux
     // premiers registres pour vous éviter des complications.
