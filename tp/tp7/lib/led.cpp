@@ -1,5 +1,5 @@
 #include "led.h"
-#define F_CPU 800000
+#define F_CPU 8000000
 #include <avr/io.h>
 #include <util/delay.h>
 const uint8_t AMBRE_DELAI = 5;

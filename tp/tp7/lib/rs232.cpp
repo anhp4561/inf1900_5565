@@ -1,3 +1,5 @@
+#define F_CPU 8000000
+#include <util/delay.h>
 #include "rs232.h"
 void initialisationUART() {
     // 2400 bauds. Nous vous donnons la valeur des deux
