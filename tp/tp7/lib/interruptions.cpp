@@ -1,3 +1,4 @@
+#include "interruptions.h"
 #include <avr/interrupt.h>: Interrupts
 
 void initInterruption0 ( void ) {

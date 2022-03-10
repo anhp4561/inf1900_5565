@@ -1,5 +1,5 @@
 
-#include "Timer.h"
+#include "timer.h"
 
 void Timer::setWaveform(Waveform mode)
 {

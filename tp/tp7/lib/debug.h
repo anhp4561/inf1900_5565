@@ -1,4 +1,4 @@
-#include "RS232.h"
+#include "rs232.h"
 #define INITmal
 
 void initUART();
