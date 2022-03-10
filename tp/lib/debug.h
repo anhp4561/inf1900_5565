@@ -1,8 +1,8 @@
 #include "RS232.h"
-#define INIT
+#define INITmal
 
 void initUART();
-void debugPrint(uint16_t);
+
 void debugPrint(const char* x);
 void debugPrint(unsigned char* x);
 

@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include "Moteur.h"
+#include "moteur.h"
 
 int main (){
     Moteur moteurs;
