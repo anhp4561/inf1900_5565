@@ -1,5 +1,5 @@
 #include "debug.h"
-# include "RS232.h"
+# include "rs232.h"
 
 void initUART(){
     initialisationUART();
