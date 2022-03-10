@@ -35,7 +35,7 @@ PRJSRC=main.cpp
 INC= -I$(lib_dir)
 
 # Libraires a lier (ex: -lmylib)
-LIBS= -ltest
+LIBS= -L ../lib
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
@@ -81,8 +81,8 @@ lib_dir = ../lib
 CFLAGS=-I. -I/usr/include/simavr  -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
 	-std=c++14 -fpack-struct -fshort-enums             \
 	-funsigned-bitfields -funsigned-char    \
-	-Wall                                        
-
+	-Wall   
+	                                     
 # Flags pour le compilateur en C++
 CXXFLAGS=-fno-exceptions     
 
@@ -132,10 +132,14 @@ OBJDEPS=$(CFILES:.c=.o) \
 #
 all: $(TRG) $(HEXROMTRG)
 
+debug : CFLAGS += -DDEBUG
+debug: $(TRG) $(HEXROMTRG)
+
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
 	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
 	-L $(lib_dir) -lm $(LIBS)
+
 
 # Production des fichiers object
 # De C a objet
