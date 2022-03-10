@@ -5,6 +5,7 @@ void initUART();
 
 void debugPrint(const char* x);
 void debugPrint(unsigned char* x);
+void debugPrint(int x);
 
 #ifdef DEBUG
 # ifdef INIT

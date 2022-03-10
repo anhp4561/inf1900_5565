@@ -12,4 +12,7 @@ void debugPrint(const char* x){
 void debugPrint(unsigned char* x){
     UARTTranmissionMot(x);
 }
+void debugPrint(int x){
+    transmissionUART(x);
+}
 

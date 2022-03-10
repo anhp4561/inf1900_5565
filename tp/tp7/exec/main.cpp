@@ -5,6 +5,7 @@
 #include "rs232.h"
 #include "bouton.h"
 #include "moteur.h"
+#include "debug.h"
 int main() {
 
 #if false 
