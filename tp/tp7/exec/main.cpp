@@ -1,11 +1,11 @@
 #define F_CPU 8000000
 #include <avr/io.h> 
 #include <util/delay.h>
-#include "Led.h"
+
 #include "RS232.h"
 #include "Bouton.h"
 int main() {
-#if defined(OFF)
+/*#if defined(OFF)
     Led led (&PORTA,0,1);
     Bouton bouton (&PIND,2);
 
@@ -18,11 +18,11 @@ int main() {
     } 
 
 #endif
-
+*/
 // Tester RS232 
 //#if defined(ON)
 initialisationUART();
 char mots[] = "Le robot en INF1900\n";
-UARTTranmissionMot(mots,21);
+UARTTranmissionMot(mots);
 //#endif
 }

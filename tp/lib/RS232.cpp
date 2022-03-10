@@ -23,10 +23,16 @@ UDR0 = donnee;
 }
 
 
-void UARTTranmissionMot(const char message[],uint8_t size){
-    for(uint8_t i=0; i<size; i++){
+void UARTTranmissionMot(const char message[]){
+    for(uint8_t i=0;; i++){
         transmissionUART (message[i]);
     }
+}
+void UARTTranmissionMot(unsigned char message[]){
+    for(uint8_t i=0;; i++){
+        transmissionUART (message[i]);
+    }
+
 }
 
 void lecture(uint8_t *addressDebut, uint8_t valeurFin){
@@ -41,8 +47,6 @@ void lecture(uint8_t *addressDebut, uint8_t valeurFin){
 
 unsigned char USART_Receive( void )
 {
-/* Wait for empty transmit buffer */
 while ( !(UCSR0A & (1<<RXC0)));
-/* Get and return received data from buffer */
 return UDR0;
 }

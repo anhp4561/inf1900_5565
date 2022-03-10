@@ -8,7 +8,8 @@
 
 void initialisationUART();
 void transmissionUART(uint8_t donnee);
-void UARTTranmissionMot(const char message[],uint8_t size);
+void UARTTranmissionMot(const char message[]);
+void UARTTranmissionMot(unsigned char charList[]);
 void lecture(uint8_t *addressDebut, uint8_t valeurFin);
 unsigned char USART_Receive( void );
 
