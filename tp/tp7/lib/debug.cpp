@@ -1,18 +1,19 @@
 #include "debug.h"
-# include "rs232.h"
+#include "rs232.h"
 
 void initUART(){
     initialisationUART();
 }
 
 
-void debugPrint(const char* x){
-    UARTTranmissionMot(x);
+
+void debugPrint(const char x[], int taille){
+    UARTTranmissionMot(x, taille);
 }
-void debugPrint(unsigned char* x){
-    UARTTranmissionMot(x);
-}
-void debugPrint(int x){
-    transmissionUART(x);
-}
+// void debugPrint(unsigned char x[], int taille){
+//     UARTTranmissionMot(x, taille);
+// }
+// void debugPrint(int x, int taille){
+//     transmissionUART(x);
+// }
 

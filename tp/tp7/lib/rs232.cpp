@@ -25,17 +25,17 @@ UDR0 = donnee;
 }
 
 
-void UARTTranmissionMot(const char message[]){
-    for(uint8_t i=0;; i++){
+void UARTTranmissionMot(const char message[], int taille){
+    for(uint8_t i=0;i < taille; i++){
         transmissionUART (message[i]);
     }
 }
-void UARTTranmissionMot(unsigned char message[]){
-    for(uint8_t i=0;; i++){
+void UARTTranmissionMot(unsigned char message[], int taille){
+    for(uint8_t i=0;i < taille; i++){
         transmissionUART (message[i]);
     }
+}
 
-}
 
 void lecture(uint8_t *addressDebut, uint8_t valeurFin){
     char temp = eeprom_read_byte(addressDebut);

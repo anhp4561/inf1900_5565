@@ -1,6 +1,7 @@
 #define F_CPU 8000000
 #include <avr/io.h> 
 #include <util/delay.h>
+#include <stdio.h>
 #include "led.h"
 #include "rs232.h"
 #include "bouton.h"
@@ -35,11 +36,13 @@ UARTTranmissionMot(mots);
     moteurs.initialisationTimer0Pwm();
     int pourcentageOC0A = 100;
     int pourcentageOC0B = 100;
+    char tampon[50];
+    int n = sprintf(tampon,"La valeur de pourcentage0C0B est : %d\n", pourcentageOC0B);
     while (true){
         moteurs.avancerMoteur(pourcentageOC0A, pourcentageOC0B);
         _delay_ms(2000);
         moteurs.tournerDroiteMoteur(pourcentageOC0B);
-        DEBUG_PRINT((pourcentageOC0B));
+        DEBUG_PRINT(tampon, n);
         _delay_ms(2000);
         moteurs.tournerGaucheMoteur(pourcentageOC0A);
         _delay_ms(2000);

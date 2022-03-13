@@ -1,5 +1,5 @@
 #include "interruptions.h"
-#include <avr/interrupt.h>: Interrupts
+#include <avr/interrupt.h> 
 
 void initInterruption0 ( void ) {
 
