@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Module qui permet l'affichage de donnes avec RS232 a des fins de debogage
+ */
+
 #include "rs232.h"
 #define INITmal
 
