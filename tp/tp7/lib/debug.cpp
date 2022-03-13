@@ -20,3 +20,5 @@ void initUart(){
 void debugPrint(const char x[], int taille){
     transmissionUartString(x, taille);
 }
+
+

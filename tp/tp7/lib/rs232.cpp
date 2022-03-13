@@ -42,15 +42,9 @@ void transmissionUartString(const char message[], int taille){
         transmissionUart(message[i]);
     }
 }
-/* methode permmettant la transmission  d'une chaine de caractére de l'UART  vers le PC
-*/
-void transmissionUartString(unsigned char message[], int taille){
-    for (uint8_t i = 0; i < taille; i++)  {
-        transmissionUart(message[i]);
-    }
-}
-/* methode permmettant de lecture d'une memoire a partir du UART
-*/
+
+
+
 void lectureUart(uint8_t *addressDebut, uint8_t valeurFin){
     char temp = eeprom_read_byte(addressDebut);
     uint8_t *address = addressDebut;

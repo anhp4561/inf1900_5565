@@ -22,7 +22,6 @@ date : 13-03-2022
 void initialisationUart();
 void transmissionUart(uint8_t donnee);
 void transmissionUartString(const char message[], int taile);
-void transmissionUartString(unsigned char message[], int taille);
 void lectureUart(uint8_t *addressDebut, uint8_t valeurFin);
 unsigned char receptionUart(void);
 
