@@ -1,3 +1,8 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Classe permettant le controle des différents timers.
+ */
 
 #include "timer.h"
 
