@@ -31,22 +31,32 @@ enum CompareOutput
 class Timer
 {
 protected:
+    //Met un timer en mode normal
     virtual void setNormal() = 0;
+    //Met un timer en mode correct
     virtual void setPWMPhaseCorrect() = 0;
+    //Met un timer en mode CTC
     virtual void setCTC() = 0;
+    //Met un timer en mode PWM rapide
     virtual void setFastPWM() = 0;
 
+    //Met le mode de comparation à normal pour un timer
     virtual void setCompareNormal() = 0;
+    //Met le mode de comparation à toggle pour un timer
     virtual void setCompareToggle() = 0;
+    //Met le mode de comparation à clear pour un timer
     virtual void setCompareClear() = 0;
+    //Met le mode de comparation à set pour un timer
     virtual void setCompareSet() = 0;
 
-public: /*
-    Timer();
-    ~Timer();*/
+public: 
+    //Choisit le mode d'un timer
     void setWaveform(Waveform mode);
+    //Choisit le mode de sortie d'un timer
     void setCompareOutput(CompareOutput mode);
+    //Choisit le prescaler d'un timer
     virtual void setPrescaler(uint16_t value);
+    //Choisit la valeur de départ d'un timer
     virtual void setTimerStartValue(uint8_t percent) = 0;
     //virtual void setCompareValuePercent(uint8_t percentA, uint8_t percentB) = 0;
     //void setCompareValuePercent(uint8_t percentA, uint8_t percentB);

@@ -6,23 +6,26 @@
 
 #include "timer.h"
 
+//Choisit le mode d'un timer
 void Timer::setWaveform(Waveform mode)
 {
     switch (mode)
     {
     case WNORMAL:
+        //Met un timer en mode normal
         setNormal();
         break;
     case PWM_PHASE_CORRECT:
+        //Met un timer en mode correct
         setPWMPhaseCorrect();
-
         break;
     case CTC:
+        //Met un timer en mode CTC
         setCTC();
         break;
     case PWM_FAST_PWM:
+        //Met un timer en mode PWM rapide
         setFastPWM();
-
         break;
     default:
         break;
@@ -30,21 +33,26 @@ void Timer::setWaveform(Waveform mode)
   
 }
 
+//Choisit le mode de sortie d'un timer
 void Timer::setCompareOutput(CompareOutput mode)
 {
     
     switch (mode)
     {
     case CNORMAL:
+        //Met le mode de comparation à normal pour un timer
         setCompareNormal();
         break;
     case TOGGLE:
+        //Met le mode de comparation à toggle pour un timer
         setCompareToggle();
         break;
     case CLEAR:
+        //Met le mode de comparation à clear pour un timer
         setCompareClear();
         break;
     case SET:
+        //Met le mode de comparation à set pour un timer
         setCompareSet();
         break;
     default:
