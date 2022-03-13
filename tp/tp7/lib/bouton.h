@@ -1,9 +1,16 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Classe permettant a controler les interactions avec un bouton poussoir
+ */
+
 #include <avr/io.h>
 class Bouton {
     public:
         Bouton (volatile uint8_t *pin, int boutonPin);
 
         // enum class pris du dossier desperate-student-librairy de Ahmad Faour
+        // Ce enum class nous permet de savoir l'etat du bouton
         enum class Etat {
             AUCUN,
             PRESSE,
@@ -25,9 +32,9 @@ class Bouton {
         void actualiserEtat(); 
 
     private:
-        // Cet attribut est la PINX qu'on va lire
+        // Cet attribut est la PINX qu'on va lire, X = A, B, C ou D
         volatile uint8_t* pin_;
-        // Cet attribut est le PXY qu'on va lire
+        // Cet attribut est le PXY qu'on va lire, Y = 0, 1, 2, ..., 7
         int boutonPin_;
         // Exemple de construction : On veut lire la valeur 2 sur PIND
         // PIND sera pin_ et 2 sera boutonPin_

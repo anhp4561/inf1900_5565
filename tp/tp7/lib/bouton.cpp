@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Classe permettant a controler les interactions avec un bouton poussoir
+ */
+ 
 #include "bouton.h"
 #define F_CPU 8000000
 #include <avr/io.h>
