@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Classe permettant le controle des deux moteurs du robot
+ */
+ 
 #include "moteur.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>

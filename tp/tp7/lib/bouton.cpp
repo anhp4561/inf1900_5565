@@ -1,7 +1,7 @@
 /*
  * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
  *
- * Description : Classe permettant a controler les interactions avec un bouton poussoir
+ * Description : Classe permettant le controle des interactions avec un bouton poussoir
  */
  
 #include "bouton.h"
