@@ -7,7 +7,7 @@
 #include "rs232.h"
 #define INITmal
 
-void initUART();
+void initUart();
 
 void debugPrint(const char x[], int taille);
 // void debugPrint(unsigned char x[], int taille );
@@ -15,7 +15,7 @@ void debugPrint(const char x[], int taille);
 
 // #ifdef DEBUG
 // # ifdef INIT
-// #  define DEBUG_PRINT(x) initUART(); debugPrint(x) // Si vous definissez transmissionUART par vous memes, vous devez « undefine» INIT manuellement
+// #  define DEBUG_PRINT(x) initUart(); debugPrint(x) // Si vous definissez transmissionUART par vous memes, vous devez « undefine» INIT manuellement
 // #  undef INIT
 // # else
 // #  define DEBUG_PRINT(x) debugPrint(x)
@@ -26,7 +26,7 @@ void debugPrint(const char x[], int taille);
 
 #ifdef DEBUG
 # ifdef INIT
-#  define DEBUG_PRINT(x, taille) initUART(); debugPrint(x, taille)  // Si vous definissez transmissionUART par vous memes, vous devez « undefine » INIT manuellement
+#  define DEBUG_PRINT(x, taille) initUart(); debugPrint(x, taille)  // Si vous definissez transmissionUART par vous memes, vous devez « undefine » INIT manuellement
 #  undef INIT
 # else
 #  define DEBUG_PRINT(x, taille) debugPrint(x,taille)

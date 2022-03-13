@@ -8,18 +8,18 @@
 #include "rs232.h"
 
 void initUART(){
-    initialisationUART();
+    initialisationUart();
 }
 
 
 
 void debugPrint(const char x[], int taille){
-    UARTTranmissionMot(x, taille);
+    transmissionUartString(x, taille);
 }
 // void debugPrint(unsigned char x[], int taille){
-//     UARTTranmissionMot(x, taille);
+//     transmissionUartString(x, taille);
 // }
 // void debugPrint(int x, int taille){
-//     transmissionUART(x);
+//     transmissionUart(x);
 // }
 

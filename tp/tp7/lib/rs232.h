@@ -1,7 +1,7 @@
 /*
  * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
  *
- * Description : Collection de fonctions qui permettent la transmission et la lecture de donnes avec UART et RS232
+ * Description : Collection de fonctions qui permettent la transmission et la lectureUart de donnes avec UART et RS232
  */
 
 #ifndef UART_H
@@ -12,11 +12,11 @@
 #include <avr/io.h>
 #include <avr/eeprom.h>
 
-void initialisationUART();
-void transmissionUART(uint8_t donnee);
-void UARTTranmissionMot(const char message[], int taile);
-void UARTTranmissionMot(unsigned char message[], int taille);
-void lecture(uint8_t *addressDebut, uint8_t valeurFin);
-unsigned char USART_Receive( void );
+void initialisationUart();
+void transmissionUart(uint8_t donnee);
+void transmissionUartString(const char message[], int taile);
+void transmissionUartString(unsigned char message[], int taille);
+void lectureUart(uint8_t *addressDebut, uint8_t valeurFin);
+unsigned char receptionUart( void );
 
 #endif
