@@ -3,7 +3,7 @@
  *
  * Description : Classe permettant le controle des deux moteurs du robot
  */
- 
+
 #include "moteur.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -20,7 +20,7 @@ void Moteur::initialisationTimer0Pwm()
     TCNT0 = 0;
     TCCR0A =
         (1 << WGM00) | 
-        (1 << WGM01) | // Mis en commentaire pour utiliser PWM Phase Correct 8-bit
+        (1 << WGM01) | // Mettre cette ligne en commentaire pour utiliser PWM Phase Correct 8-bit
         (1 << COM0A1)| 
         (1 << COM0B1);
     TCCR0B = (1 << CS01); 

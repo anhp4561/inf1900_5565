@@ -14,23 +14,29 @@ class Moteur {
         // fonction pris du dossier desperate-student de Ahmad Faour
         void initialisationTimer0Pwm();
 
+        // fait tourner les 2 roues du robot ce qui fait avancer le robot
         void avancerMoteur(int pourcentageOC0A, int pourcentageOC0B);
 
+        // fait tourner les 2 roues au sens inverse ce qui fait reculer le robot
         void reculerMoteur(int pourcentageOC0A, int pourcentageOC0B);
 
+        // fait tourner uniquement la roue de droite ce qui fait tourner le robot a gauche
         void tournerGaucheMoteur(int pourcentageOC0A);
 
+        // fait tourner uniquement la roue de gauche ce qui fait tourner le robot a droite
         void tournerDroiteMoteur(int pourcentageOC0B);
 
+        // met le pwm a 0 ce qui arrete les moteurs
         void arreterMoteur();
 
     private:
+        // regle le pourcentage du pwm pour chaque moteur
         void reglerVitesseMoteur(int pourcentageOC0A, int pourcentageOC0B);
 
 };
 
 
-// Emplacement des cables lors de la programmation de Moteur.h et de Moteur.cpp
+// Emplacement des cables lors de la programmation de moteur.h et de moteur.cpp
 // PB2 vers Direction M1
 // PB3 ou OC0A vers Enable M1
 // PB4 ou OC0B vers Enable M2
