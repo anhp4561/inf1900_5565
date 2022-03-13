@@ -16,10 +16,5 @@ void initUART(){
 void debugPrint(const char x[], int taille){
     transmissionUartString(x, taille);
 }
-// void debugPrint(unsigned char x[], int taille){
-//     transmissionUartString(x, taille);
-// }
-// void debugPrint(int x, int taille){
-//     transmissionUart(x);
-// }
+
 

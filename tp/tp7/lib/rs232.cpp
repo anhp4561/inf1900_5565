@@ -36,11 +36,7 @@ void transmissionUartString(const char message[], int taille){
         transmissionUart (message[i]);
     }
 }
-void transmissionUartString(unsigned char message[], int taille){
-    for(uint8_t i=0;i < taille; i++){
-        transmissionUart (message[i]);
-    }
-}
+
 
 
 void lectureUart(uint8_t *addressDebut, uint8_t valeurFin){
