@@ -9,6 +9,7 @@
 #include "debug.h"
 int main() {
 
+// tester Bouton et Led
 #if false 
     Led led (&PORTA,0,1);
     Bouton bouton (&PIND,2);
@@ -54,18 +55,5 @@ UARTTranmissionMot(mots);
     }
 #endif 
 
-// tester Bouton et Led
-#if false
-    Led led (&PORTA,0,1);
-    Bouton bouton (&PIND,2);
-    while (true){
-        if (bouton.estBoutonPresseRappel())
-            led.allumerRougeLed();
-        
-        else 
-            led.allumerVertLed();
-    } 
-#endif
 }
-
 

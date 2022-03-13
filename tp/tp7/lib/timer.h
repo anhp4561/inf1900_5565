@@ -1,6 +1,10 @@
-/*
- * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
- *
+ /*
+* Nom : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+* Travail : TRAVAIL_PRATIQUE 7
+* Section # : 3
+* Equipe # : 5565
+* Correcteur : Ghali chraibi ,	Charles Jiang 
+* date : 13-03-2022
  * Description : Classe permettant le controle des différents timers.
  */
 
@@ -8,28 +12,25 @@
 #define TIMER_H
 
 #define F_CPU 8000000
-#include <util/delay.h>
-#include <avr/interrupt.h>
 #include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
 
-enum Waveform
-{
+enum Waveform{
     WNORMAL,
     PWM_PHASE_CORRECT,
     CTC,
     PWM_FAST_PWM
 };
 
-enum CompareOutput
-{
+enum CompareOutput{
     CNORMAL,
     TOGGLE,
     CLEAR,
     SET
 };
 
-class Timer
-{
+class Timer{
 protected:
     //Met un timer en mode normal
     virtual void setNormal() = 0;

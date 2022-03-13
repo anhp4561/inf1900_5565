@@ -1,9 +1,12 @@
 /*
- * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
- *
+* Nom : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+* Travail : TRAVAIL_PRATIQUE 7
+* Section # : 3
+* Equipe # : 5565
+* Correcteur : Ghali chraibi ,	Charles Jiang 
+* date : 13-03-2022
  * Description : Classe permettant le controle des différents timers.
  */
-
 #include "timer.h"
 
 //Choisit le mode d'un timer
@@ -30,7 +33,6 @@ void Timer::setWaveform(Waveform mode)
     default:
         break;
     }
-  
 }
 
 //Choisit le mode de sortie d'un timer
@@ -58,73 +60,55 @@ void Timer::setCompareOutput(CompareOutput mode)
     default:
         break;
     }
-    ////sei();
 }
 
-
-Timer0::Timer0(/* args */)
-{
-
+Timer0::Timer0(/* args */){
     setInterupts(false, false, false);
 }
 
-Timer0::~Timer0()
-{
+Timer0::~Timer0(){
 }
 
-void Timer0::setNormal()
-{
+void Timer0::setNormal(){
     TCCR0A &= ~(1 << WGM01) & ~(1 << WGM00);
     TCCR0B &= ~(1 << WGM02);
 }
-void Timer0::setPWMPhaseCorrect()
-{
+void Timer0::setPWMPhaseCorrect(){
     TCCR0A &= ~(1 << WGM01);
     TCCR0A |= (1 << WGM00);
     TCCR0B &= ~(1 << WGM02);
 }
-void Timer0::setCTC()
-{
+void Timer0::setCTC(){
     TCCR0A |= (1 << WGM01);
     TCCR0A &= ~(1 << WGM00);
     TCCR0B &= ~(1 << WGM02);
 }
-void Timer0::setFastPWM()
-{
+void Timer0::setFastPWM(){
     TCCR0A |= (1 << WGM01) | (1 << WGM00);
     TCCR0B &= ~(1 << WGM02);
 }
-void Timer0::setCompareNormal()
-{
+void Timer0::setCompareNormal(){
     TCCR0A &= ~(1 << COM0A1) & ~(1 << COM0A0);
     TCCR0A &= ~(1 << COM0B1) & ~(1 << COM0B0);
 }
-void Timer0::setCompareToggle()
-{
+void Timer0::setCompareToggle(){
     TCCR0A &= ~(1 << COM0A1);
     TCCR0A |= (1 << COM0A0);
-
     TCCR0A &= ~(1 << COM0B1);
     TCCR0A |= (1 << COM0B0);
 }
-void Timer0::setCompareClear()
-{
+void Timer0::setCompareClear(){
     TCCR0A |= (1 << COM0A1);
     TCCR0A &= ~(1 << COM0A0);
-
     TCCR0A |= (1 << COM0B1);
     TCCR0A &= ~(1 << COM0B0);
 }
-void Timer0::setCompareSet()
-{
+void Timer0::setCompareSet(){
     TCCR0A |= (1 << COM0A1) | (1 << COM0A0);
-
     TCCR0A |= (1 << COM0B1) | (1 << COM0B0);
 }
-void Timer0::setPrescaler(uint16_t value)
-{
-    switch (value)
-    {
+void Timer0::setPrescaler(uint16_t value){
+    switch (value){
     case 0:
         TCCR0B &= ~(1 << CS02) & ~(1 << CS01) & ~(1 << CS00);
         break;
@@ -153,18 +137,15 @@ void Timer0::setPrescaler(uint16_t value)
     }
 }
 
-void Timer0::setTimerValue(uint8_t value)
-{
+void Timer0::setTimerValue(uint8_t value){
     TCNT0 = value;
 }
-void Timer0::setCompareValue(uint8_t A, uint8_t B)
-{
+void Timer0::setCompareValue(uint8_t A, uint8_t B){
     OCR0A = A;
     OCR0B = B;
 }
 
-void Timer0::setTimerStartValue(uint8_t percent)
-{
+void Timer0::setTimerStartValue(uint8_t percent){
     uint8_t hundred = 100;
     uint8_t bits = 255;
     int value = (percent * bits) / hundred;
@@ -172,102 +153,76 @@ void Timer0::setTimerStartValue(uint8_t percent)
     setTimerValue(percent);
 }
 
-void Timer0::setInterupts(bool compareA, bool compareB, bool compareOF)
-{
-    //cli();
-    if (compareA)
-    {
+void Timer0::setInterupts(bool compareA, bool compareB, bool compareOF){
+    if (compareA) {
         TIMSK0 |= (1 << OCIE0A);
     }
-    else
-    {
+    else{
         TIMSK0 &= ~(1 << OCIE0A);
     }
 
-    if (compareB)
-    {
+    if (compareB){
         TIMSK0 |= (1 << OCIE0B);
     }
-    else
-    {
+    else{
         TIMSK0 &= ~(1 << OCIE0B);
     }
 
-    if (compareOF)
-    {
+    if (compareOF){
         TIMSK0 |= (1 << TOIE0);
     }
-    else
-    {
+    else{
         TIMSK0 &= ~(1 << TOIE0);
     }
-    //sei();
 }
 
 //----------------------------------------------
 //Timer1
 
-Timer1::Timer1(/* args */)
-{
+Timer1::Timer1(/* args */){
     setInterupts(false, false, false);
 }
-
-Timer1::~Timer1()
-{
+Timer1::~Timer1(){
 }
-
-void Timer1::setNormal()
-{
+void Timer1::setNormal(){
     TCCR1A &= ~(1 << WGM11) & ~(1 << WGM10);
     TCCR1B &= ~(1 << WGM12);
 }
-void Timer1::setPWMPhaseCorrect()
-{
+void Timer1::setPWMPhaseCorrect(){
     TCCR1A &= ~(1 << WGM11);
     TCCR1A |= (1 << WGM10);
     TCCR1B &= ~(1 << WGM12);
 }
-void Timer1::setCTC()
-{
+void Timer1::setCTC(){
     TCCR1A |= (1 << WGM11);
     TCCR1A &= ~(1 << WGM10);
     TCCR1B &= ~(1 << WGM12);
 }
-void Timer1::setFastPWM()
-{
+void Timer1::setFastPWM(){
     TCCR1A |= (1 << WGM11) | (1 << WGM10);
     TCCR1B &= ~(1 << WGM12);
 }
-void Timer1::setCompareNormal()
-{
+void Timer1::setCompareNormal(){
     TCCR1A &= ~(1 << COM1A1) & ~(1 << COM1A0);
 }
-void Timer1::setCompareToggle()
-{
+void Timer1::setCompareToggle(){
     TCCR1A &= ~(1 << COM1A1);
     TCCR1A |= (1 << COM1A0);
-
     TCCR1A &= ~(1 << COM1B1);
     TCCR1A |= (1 << COM1B0);
 }
-void Timer1::setCompareClear()
-{
+void Timer1::setCompareClear(){
     TCCR1A |= (1 << COM1A1);
     TCCR1A &= ~(1 << COM1A0);
-
     TCCR1A |= (1 << COM1B1);
     TCCR1A &= ~(1 << COM1B0);
 }
-void Timer1::setCompareSet()
-{
+void Timer1::setCompareSet(){
     TCCR1A |= (1 << COM1A1) | (1 << COM1A0);
-
     TCCR1A |= (1 << COM1B1) | (1 << COM1B0);
 }
-void Timer1::setPrescaler(uint16_t value)
-{
-    switch (value)
-    {
+void Timer1::setPrescaler(uint16_t value){
+    switch (value){
     case 0:
         TCCR1B &= ~(1 << CS12) & ~(1 << CS11) & ~(1 << CS10);
         break;
@@ -296,132 +251,93 @@ void Timer1::setPrescaler(uint16_t value)
     }
 }
 
-void Timer1::setTimerValue(uint16_t value)
-{
+void Timer1::setTimerValue(uint16_t value){
     TCNT1 = value;
 }
-void Timer1::setCompareValue(uint8_t A, uint8_t B)
-{
+void Timer1::setCompareValue(uint8_t A, uint8_t B){
     OCR1A = A;
     OCR1B = B;
 }
 
-void Timer1::setTimerStartValue(uint8_t percent)
-{
+void Timer1::setTimerStartValue(uint8_t percent){
     uint16_t hundred = 100;
     uint16_t bits = 65534;
     uint16_t speed = percent * (bits / hundred);
 
     setTimerValue(speed);
 }
-// void Timer1::setCompareValuePercent(uint8_t percentA, uint8_t percentB)
-// {
-//     uint16_t hundred = 100;
-//     uint16_t bits = 65534;
-//     uint16_t valueA = percentA * (bits / hundred);
-
-//     uint16_t valueB = percentB * (bits / hundred);
-
-//     setCompareValue(200, 200);
-// };
-
-void Timer1::setInterupts(bool compareA, bool compareB, bool compareOF)
-{
-    //cli();
-    if (compareA)
-    {
+void Timer1::setInterupts(bool compareA, bool compareB, bool compareOF){
+    if (compareA){
         TIMSK1 |= (1 << OCIE1A);
     }
-    else
-    {
+    else{
         TIMSK1 &= ~(1 << OCIE1A);
     }
-
-    if (compareB)
-    {
+    if (compareB){
         TIMSK1 |= (1 << OCIE1B);
     }
-    else
-    {
+    else{
         TIMSK1 &= ~(1 << OCIE1B);
     }
 
-    if (compareOF)
-    {
+    if (compareOF){
         TIMSK1 |= (1 << TOIE1);
     }
-    else
-    {
+    else{
         TIMSK1 &= ~(1 << TOIE1);
     }
-    //sei();
 }
 
 //----------------------------------------------
 //Timer2
 
-Timer2::Timer2(/* args */)
-{
+Timer2::Timer2(/* args */){
     setInterupts(false, false, false);
 }
 
-Timer2::~Timer2()
-{
+Timer2::~Timer2(){
 }
 
-void Timer2::setNormal()
-{
+void Timer2::setNormal(){
     TCCR2A &= ~(1 << WGM21) & ~(1 << WGM20);
     TCCR2B &= ~(1 << WGM22);
 }
-void Timer2::setPWMPhaseCorrect()
-{
+void Timer2::setPWMPhaseCorrect(){
     TCCR2A &= ~(1 << WGM21);
     TCCR2A |= (1 << WGM20);
     TCCR2B &= ~(1 << WGM22);
 }
-void Timer2::setCTC()
-{
+void Timer2::setCTC(){
     TCCR2A |= (1 << WGM21);
     TCCR2A &= ~(1 << WGM20);
     TCCR2B &= ~(1 << WGM22);
 }
-void Timer2::setFastPWM()
-{
+void Timer2::setFastPWM(){
     TCCR2A |= (1 << WGM21) | (1 << WGM20);
     TCCR2B &= ~(1 << WGM22);
 }
-void Timer2::setCompareNormal()
-{
+void Timer2::setCompareNormal(){
     TCCR2A &= ~(1 << COM2A1) & ~(1 << COM2A0);
-
     TCCR2A &= ~(1 << COM2B1) & ~(1 << COM2B0);
 }
-void Timer2::setCompareToggle()
-{
+void Timer2::setCompareToggle(){
     TCCR2A &= ~(1 << COM2A1);
     TCCR2A |= (1 << COM2A0);
-
     TCCR2A &= ~(1 << COM2B1);
     TCCR2A |= (1 << COM2B0);
 }
-void Timer2::setCompareClear()
-{
+void Timer2::setCompareClear(){
     TCCR2A |= (1 << COM2A1);
     TCCR2A &= ~(1 << COM2A0);
-
     TCCR2A &= ~(1 << COM2B1);
     TCCR2A |= (1 << COM2B0);
 }
-void Timer2::setCompareSet()
-{
+void Timer2::setCompareSet(){
     TCCR2A |= (1 << COM2A1) | (1 << COM2A0);
     TCCR2A |= (1 << COM2B1) | (1 << COM2B0);
 }
-void Timer2::setPrescaler(uint16_t value)
-{
-    switch (value)
-    {
+void Timer2::setPrescaler(uint16_t value){
+    switch (value){
     case 0:
         TCCR2B &= ~(1 << CS22) & ~(1 << CS21) & ~(1 << CS20);
         break;
@@ -450,63 +366,40 @@ void Timer2::setPrescaler(uint16_t value)
     }
 }
 
-void Timer2::setTimerValue(uint8_t value)
-{
+void Timer2::setTimerValue(uint8_t value){
     TCNT2 = value;
 }
-void Timer2::setCompareValue(uint8_t A, uint8_t B)
-{
+void Timer2::setCompareValue(uint8_t A, uint8_t B){
     OCR2A = A;
     OCR2B = B;
 }
 
-void Timer2::setTimerStartValue(uint8_t percent)
-{
+void Timer2::setTimerStartValue(uint8_t percent){
     uint8_t hundred = 100;
     uint8_t bits = 255;
     int value = (percent * bits) / hundred;
     percent = value;
     setTimerValue(percent);
 }
-// void Timer2::setCompareValuePercent(uint8_t percentA, uint8_t percentB)
-// {
-//     uint8_t hundred = 100;
-//     uint8_t bits = 255;
-//     int valueA = (percentA * bits) / hundred;
-//     percentA = valueA;
-//     int valueB = (percentB * bits) / hundred;
-//     percentB = valueB;
-//     setCompareValue(percentA, percentB);
-// };
-
-void Timer2::setInterupts(bool compareA, bool compareB, bool compareOF)
-{
-    //cli();
-    if (compareA)
-    {
+void Timer2::setInterupts(bool compareA, bool compareB, bool compareOF){
+    if (compareA){
         TIMSK2 |= (1 << OCIE2A);
     }
-    else
-    {
+    else{
         TIMSK2 &= ~(1 << OCIE2A);
     }
 
-    if (compareB)
-    {
+    if (compareB){
         TIMSK2 |= (1 << OCIE2B);
     }
-    else
-    {
+    else{
         TIMSK2 &= ~(1 << OCIE2B);
     }
 
-    if (compareOF)
-    {
+    if (compareOF){
         TIMSK2 |= (1 << TOIE2);
     }
-    else
-    {
+    else{
         TIMSK2 &= ~(1 << TOIE2);
     }
-    //sei();
 }
