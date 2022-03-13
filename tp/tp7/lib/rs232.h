@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Collection de fonctions qui permettent la transmission et la lecture de donnes avec UART et RS232
+ */
+
 #ifndef UART_H
 #define UART_H
 #define F_CPU 8000000

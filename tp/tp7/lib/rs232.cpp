@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Collection de fonctions qui permettent la transmission et la lecture de donnes avec UART et RS232
+ */
+
 #define F_CPU 8000000
 #include <util/delay.h>
 #include "rs232.h"
