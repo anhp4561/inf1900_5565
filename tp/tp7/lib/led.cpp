@@ -1,3 +1,9 @@
+/*
+ * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+ *
+ * Description : Classe permettant le controle d'une LED
+ */
+
 #include "led.h"
 #define F_CPU 8000000
 #include <avr/io.h>
