@@ -1,7 +1,14 @@
+
 /*
- * Autheurs-es : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+* Nom : Anh Pham, Younes Lazzali, Oscard Arcand et Ben Jemaa Manel
+* Travail : TRAVAIL_PRATIQUE 7
+* Section # : 3
+* Equipe # : 5565
+* Correcteur : Ghali chraibi ,	Charles Jiang 
+date : 13-03-2022
  *
- * Description : Collection de fonctions qui permettent la transmission et la lectureUart de donnes avec UART et RS232
+ * Description : 
+ Cette classe permet l'initialisation transmission et la reception des données en utilisant RS232
  */
 
 #ifndef UART_H
@@ -17,6 +24,6 @@ void transmissionUart(uint8_t donnee);
 void transmissionUartString(const char message[], int taile);
 void transmissionUartString(unsigned char message[], int taille);
 void lectureUart(uint8_t *addressDebut, uint8_t valeurFin);
-unsigned char receptionUart( void );
+unsigned char receptionUart(void);
 
 #endif
