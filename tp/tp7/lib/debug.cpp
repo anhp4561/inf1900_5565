@@ -17,7 +17,7 @@ void initUart(){
 }
 /* methode permet d'imprimer en urilisant RS232
 */
-void debugPrint(const char x[], int taille){
+void debugPrint(char x[], uint8_t taille){
     transmissionUartString(x, taille);
 }
 

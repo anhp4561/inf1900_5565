@@ -22,10 +22,9 @@ void initialisationUart(){
     UBRR0L = 0xCF;
     // permettre la réception et la transmission par le UART0
     UCSR0A = 0;
-    UCSR0A |= (1 << TXC0) | (1 << UDRE0) | (1 << MPCM0);
-    UCSR0B = (1 << RXCIE0) | (1 << TXCIE0) | (1 << UDRIE0) | (1 << RXEN0) | (1 << TXEN0);
+    UCSR0B = (1 << RXEN0) | (1 << TXEN0);
     // Format des trames: 8 bits, 1 stop bits, sans parité
-    UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+    UCSR0C = (1<<USBS0)|(1 << UCSZ01) | (1 << UCSZ00);
 }
 
 /* methode permmettant la transmission  de l'UART  vers le PC
@@ -35,9 +34,10 @@ void transmissionUart(uint8_t donnee){
         _delay_ms(30);
     UDR0 = donnee;
 }
+
 /* methode permmettant la transmission  d'une chaine de caractére de l'UART  vers le PC
 */
-void transmissionUartString(const char message[], int taille){
+void transmissionUartString(char message[], uint8_t taille){
     for (uint8_t i = 0; i < taille; i++){
         transmissionUart(message[i]);
     }

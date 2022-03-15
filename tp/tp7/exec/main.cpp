@@ -26,13 +26,14 @@ int main() {
 
 // Tester RS232 
 #if false  
-initialisationUART();
+initialisationUart();
 char mots[] = "Le robot en INF1900\n";
-UARTTranmissionMot(mots);
+transmissionUartString(mots);
 #endif
 
 //tester PWM et Debug
 #if true
+    initialisationUart();
     Moteur moteurs;
     moteurs.initialisationTimer0Pwm();
     int pourcentageOC0A = 100;
