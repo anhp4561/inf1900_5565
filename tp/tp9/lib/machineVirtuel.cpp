@@ -49,41 +49,38 @@ void allumerLedVm(Led& led){
     led.allumerRougeLed();
 }
 
-void allumerLedVm(int operande, Led& led1,Led& led2,Led& led3,Led& led4,Led& led5,Led& led6, Led& led7) { // changer le nom de variable operandes
-    switch (operande) {
-        case 1 :
-            led1.allumerRougeLed();
-            break;
-        case 2 :
-            led2.allumerRougeLed();
-            break;
-        case 4 :
-            led3.allumerRougeLed();
-            break;
-        case 8 :
-            led4.allumerRougeLed();
-            break;
-        case 16 :
-            led5.allumerRougeLed();
-            break;
-        case 32 :
-            led6.allumerRougeLed();
-            break;
-        case 64 :
-            led7.allumerRougeLed();
-            break;
-        case 127 :
-            led1.allumerRougeLed();
-            led2.allumerRougeLed();
-            led3.allumerRougeLed();
-            led4.allumerRougeLed();
-            led5.allumerRougeLed();
-            led6.allumerRougeLed();
-            led7.allumerRougeLed();
-            break;
-        default:
-            break;
-    }
+void allumerLedVm(int operande, Led& led0, Led& led1,Led& led2,Led& led3,Led& led4,Led& led5,Led& led6, Led& led7) { // changer le nom de variable operandes
+if ((operande & 0x01) == 0x01) {
+    led0.allumerRougeLed();
+}
+
+if ((operande & 0x02) == 0x02) {
+    led1.allumerRougeLed();
+}
+
+if ((operande & 0x04) == 0x04) {
+    led2.allumerRougeLed();
+}
+
+if ((operande & 0x08) == 0x08) {
+    led3.allumerRougeLed();
+}
+
+if ((operande & 0x10) == 0x10) {
+    led4.allumerRougeLed();
+}
+
+if ((operande & 0x20) == 0x20) {
+    led5.allumerRougeLed();
+}
+
+if ((operande & 0x40) == 0x40) {
+    led6.allumerRougeLed();
+}
+
+if ((operande & 0x80) == 0x80) {
+    led7.allumerRougeLed();
+}
 
 }
 
@@ -91,41 +88,39 @@ void eteindreLedVm(Led& led){
     led.eteindreLed();
 }
 
-void eteindreLedVm(int operande, Led& led1,Led& led2,Led& led3,Led& led4,Led& led5,Led& led6, Led& led7) {
-    switch (operande) {
-        case 1 :
-            led1.eteindreLed();
-            break;
-        case 2 :
-            led2.eteindreLed();
-            break;
-        case 4 :
-            led3.eteindreLed();
-            break;
-        case 8 :
-            led4.eteindreLed();
-            break;
-        case 16 :
-            led5.eteindreLed();
-            break;
-        case 32 :
-            led6.eteindreLed();
-            break;
-        case 64 :
-            led7.eteindreLed();
-            break;
-        case 127 :
-            led1.eteindreLed();
-            led2.eteindreLed();
-            led3.eteindreLed();
-            led4.eteindreLed();
-            led5.eteindreLed();
-            led6.eteindreLed();
-            led7.eteindreLed();
-            break;
-        default:
-            break;
-    }
+void eteindreLedVm(int operande, Led& led0, Led& led1,Led& led2,Led& led3,Led& led4,Led& led5,Led& led6, Led& led7) {
+if ((operande & 0x01) == 0x01) {
+    led0.eteindreLed();
+}
+
+if ((operande & 0x02) == 0x02) {
+    led1.eteindreLed();
+}
+
+if ((operande & 0x04) == 0x04) {
+    led2.eteindreLed();
+}
+
+if ((operande & 0x08) == 0x08) {
+    led3.eteindreLed();
+}
+
+if ((operande & 0x10) == 0x10) {
+    led4.eteindreLed();
+}
+
+if ((operande & 0x20) == 0x20) {
+    led5.eteindreLed();
+}
+
+if ((operande & 0x40) == 0x40) {
+    led6.eteindreLed();
+}
+
+if ((operande & 0x80) == 0x80) {
+    led7.eteindreLed();
+}
+
 }
 
 // Delai
