@@ -34,11 +34,19 @@ void attendreVm (uint8_t operande);
 // a la fin du double, on decremente le compteeur et on saute a l'addresse de la premiere instruction
 
 // Sonnerie
+class Sonnerie {
+public :
+    void initialisationTimer1CtcVm (Timer1& timer1);
 
-void initialisationTimer1CtcVm (Timer1& timer1);
+    void jouerSonnerieVm (uint8_t note);
 
-void jouerSonnerieVm (uint8_t note);
+    void arreterSonnerieVm ();
 
-void arreterSonnerieVm () ;
+private :
+    double frequencePwm_ = 0;
+
+};
+
+
 
 

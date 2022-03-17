@@ -36,25 +36,21 @@ protected:
     virtual void setNormal() = 0;
     //Met un timer en mode correct
     virtual void setPWMPhaseCorrect() = 0;
-    
+    //Met un timer en mode CTC
+    virtual void setCTC() = 0;
     //Met un timer en mode PWM rapide
     virtual void setFastPWM() = 0;
 
     //Met le mode de comparation à normal pour un timer
     virtual void setCompareNormal() = 0;
-    
+    //Met le mode de comparation à toggle pour un timer
+    virtual void setCompareToggle() = 0;
     //Met le mode de comparation à clear pour un timer
     virtual void setCompareClear() = 0;
     //Met le mode de comparation à set pour un timer
     virtual void setCompareSet() = 0;
 
 public: 
-    //Met un timer en mode CTC
-    virtual void setCTC() = 0;
-
-    //Met le mode de comparation à toggle pour un timer
-    virtual void setCompareToggle() = 0;
-
     //Choisit le mode d'un timer
     void setWaveform(Waveform mode);
     //Choisit le mode de sortie d'un timer
@@ -74,18 +70,16 @@ class Timer0 : public Timer
 protected:
     void setNormal();
     void setPWMPhaseCorrect();
-    
+    void setCTC();
     void setFastPWM();
     void setCompareNormal();
-    
+    void setCompareToggle();
     void setCompareClear();
     void setCompareSet();
 
 public:
     Timer0(/* args */);
     ~Timer0();
-    void setCTC();
-    void setCompareToggle();
     void setPrescaler(uint16_t value);
     void setTimerValue(uint8_t value);
     void setCompareValue(uint8_t A, uint8_t B);
@@ -98,18 +92,16 @@ class Timer1 : public Timer
 protected:
     void setNormal();
     void setPWMPhaseCorrect();
-    
+    void setCTC();
     void setFastPWM();
     void setCompareNormal();
-    
+    void setCompareToggle();
     void setCompareClear();
     void setCompareSet();
 
 public:
     Timer1(/* args */);
     ~Timer1();
-    void setCTC();
-    void setCompareToggle();
     void setPrescaler(uint16_t value);
     void setTimerValue(uint16_t value);
     void setCompareValue(uint8_t A, uint8_t B);
@@ -123,18 +115,16 @@ class Timer2 : public Timer
 protected:
     void setNormal();
     void setPWMPhaseCorrect();
-    
+    void setCTC();
     void setFastPWM();
     void setCompareNormal();
-    
+    void setCompareToggle();
     void setCompareClear();
     void setCompareSet();
 
 public:
     Timer2(/* args */);
     ~Timer2();
-    void setCTC();
-    void setCompareToggle();
     void setPrescaler(uint16_t value);
     void setTimerValue(uint8_t value);
     void setCompareValue(uint8_t A, uint8_t B);

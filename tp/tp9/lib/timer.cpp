@@ -194,9 +194,9 @@ void Timer1::setPWMPhaseCorrect(){
     TCCR1B &= ~(1 << WGM12);
 }
 void Timer1::setCTC(){
-    TCCR1A |= (1 << WGM11);
+    TCCR1A &= ~(1 << WGM11);
     TCCR1A &= ~(1 << WGM10);
-    TCCR1B &= ~(1 << WGM12);
+    TCCR1B |= (1 << WGM12);
 }
 void Timer1::setFastPWM(){
     TCCR1A |= (1 << WGM11) | (1 << WGM10);

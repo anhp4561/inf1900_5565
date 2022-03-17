@@ -1,9 +1,11 @@
 #define F_CPU 8000000
 #include <util/delay.h>
 #include "machineVirtuel.h"
+
 const uint8_t POURCENTAGE = 100;
 const uint8_t VALEUR_MAX_TIMER0 = 255;
 const uint8_t MULTIPLICATEUR_DELAI = 25;
+const uint8_t PRESCALER = 8;
 
 
 void avancerMoteurVm(int pourcentagePwm, Moteur& moteurs){
@@ -147,172 +149,136 @@ void attendreVm (const uint8_t operande) {
 
 // Sonnerie 
 
-void initialisationTimer1CtcVm (Timer1& timer1) {
-    timer1.setCTC();
-    timer1.setCompareToggle();
-    timer1.setPrescaler(1); // prescalor = 1, je ne permet d'utiliser un nombre magique puisque c'est egal a 1
+void Sonnerie::initialisationTimer1CtcVm (Timer1& timer1) {
+    timer1.setWaveform(Waveform::CTC);
+    timer1.setCompareOutput(CompareOutput::TOGGLE);
+    timer1.setPrescaler(PRESCALER);
+    timer1.setInterupts(true, false, false); // compare A
     TCNT1 = 0;
 }
 
-void jouerSonnerieVm (uint8_t note){
-    // justification de mettre :OCR1A = F_CPU / ( 2 * frequencePwm); dans les cases
+void Sonnerie::jouerSonnerieVm (uint8_t note){
+    // justification de mettdans les cases
     // faire ainsi fait que si on donne un parametre non valide (inferieur a 45 ou superieur a 82), cette fonction ne fait rien
-    double frequencePwm;
     switch (note){ 
         case 45:
-            frequencePwm = 110.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); // Toutes les valeurs de OCR1A ont ete obtenu avec l'equation qui se trouve a la page 96 de la documentation d'atmel
+            frequencePwm_ = 110.0; // Toutes les valeurs de OCR1A ont ete obtenu avec l'equation qui se trouve a la page 96 de la documentation d'atmel
             break;
         case 46:
-            frequencePwm = 116.54;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 116.54;
             break;
         case 47:
-            frequencePwm = 123.47;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 123.47;
             break;
         case 48:
-            frequencePwm = 130.81;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 130.81;
             break;
         case 49:
-            frequencePwm = 138.59;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 138.59;
             break;
         case 50:
-            frequencePwm = 146.83;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 146.83;
             break;
         case 51:
-            frequencePwm = 155.56;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 155.56;
             break;
         case 52:
-            frequencePwm = 164.81;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 164.81;
             break;
         case 53:
-            frequencePwm = 174.61;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 174.61;
             break;
         case 54:
-            frequencePwm = 185.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 185.0;
             break;
         case 55:
-            frequencePwm = 196.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 196.0;
             break;
         case 56:
-            frequencePwm = 207.65;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 207.65;
             break;
         case 57:
-            frequencePwm = 220.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 220.0;
             break;
         case 58:
-            frequencePwm = 233.08;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 233.08;
             break;
         case 59:
-            frequencePwm = 246.94;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 246.94;
             break;
         case 60:
-            frequencePwm = 261.63;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 261.63;
             break;
         case 61:
-            frequencePwm = 277.18;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 277.18;
             break;
         case 62:
-            frequencePwm = 293.66;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 293.66;
             break;
         case 63:
-            frequencePwm = 311.13;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 311.13;
             break;
         case 64:
-            frequencePwm = 329.63;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 329.63;
             break;
         case 65:
-            frequencePwm = 349.23;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 349.23;
             break;
         case 66:
-            frequencePwm = 369.99;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 369.99;
             break;
         case 67:
-            frequencePwm = 392.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 392.0;
             break;
         case 68:
-            frequencePwm = 415.30;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 415.30;
             break;
         case 69:
-            frequencePwm = 440.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 440.0;
             break;
         case 70:
-            frequencePwm = 466.16;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 466.16;
             break;
         case 71:
-            frequencePwm = 493.88;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 493.88;
             break;
         case 72:
-            frequencePwm = 523.25;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 523.25;
             break;
         case 73:
-            frequencePwm = 554.37;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 554.37;
             break;
         case 74:
-            frequencePwm = 587.33;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 587.33;
             break;
         case 75:
-            frequencePwm = 622.25;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 622.25;
             break;
         case 76:
-            frequencePwm = 659.26;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 659.26;
             break;
         case 77:
-            frequencePwm = 698.46;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 698.46;
             break;
         case 78:
-            frequencePwm = 739.99;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 739.99;
             break;
         case 79:
-            frequencePwm = 783.99;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 783.99;
             break;
         case 80:
-            frequencePwm = 830.61;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 830.61;
             break;
         case 81:
-            frequencePwm = 880.0;
-            OCR1A = F_CPU / ( 2 * frequencePwm); 
+            frequencePwm_ = 880.0;
             break;
         default:
             break; 
     }
+    OCR1A = F_CPU / ( 2 * PRESCALER * frequencePwm_); 
 }
  
 
-void arreterSonnerieVm () {
+void Sonnerie::arreterSonnerieVm () {
     OCR1A = 0;
 }
