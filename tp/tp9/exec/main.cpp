@@ -12,13 +12,13 @@
 
 volatile bool basculeTimer = false;
 
-ISR(TIMER1_COMPA_vect)
-{
-    PORTD = basculeTimer ? 0 : 1; // a ameliorer plus tard
-    basculeTimer = !basculeTimer;
+// ISR(TIMER1_COMPA_vect)
+// {
+//     PORTD = basculeTimer ? 0 : 1; // a ameliorer plus tard
+//     basculeTimer = !basculeTimer;
 
-    TIFR1 |= (1 << OCF1A);
-}
+//     TIFR1 |= (1 << OCF1A);
+// }
 
 int main() {
 
