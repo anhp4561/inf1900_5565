@@ -15,5 +15,5 @@ public :
 private :
     void initialisationTimer1CtcVm (/*Timer1& timer1*/);
     double frequencePwm_ = 0;
-
+    
 };
