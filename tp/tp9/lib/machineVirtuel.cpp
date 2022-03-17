@@ -168,8 +168,6 @@ void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
 }
 
 void Sonnerie::jouerSonnerieVm (uint8_t note){
-    // justification de mettdans les cases
-    // faire ainsi fait que si on donne un parametre non valide (inferieur a 45 ou superieur a 82), cette fonction ne fait rien
     switch (note){ 
         case 45:
             frequencePwm_ = 110.0; // Toutes les valeurs de OCR1A ont ete obtenu avec l'equation qui se trouve a la page 96 de la documentation d'atmel
