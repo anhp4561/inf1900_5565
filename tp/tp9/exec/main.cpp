@@ -48,7 +48,6 @@ transmissionUartString(mots);
 #if false
     initialisationUart();
     Moteur moteurs;
-    moteurs.initialisationTimer0Pwm();
     int pourcentageOC0A = 100;
     int pourcentageOC0B = 100;
     while (true){
@@ -74,22 +73,21 @@ transmissionUartString(mots);
     initialisationUart();
     DDRD = 0xff;
     Timer1 timer1;
-    Sonnerie sonnerie;
+    Sonnerie sonnerie = Sonnerie(/*timer1*/);
     Moteur moteurs;
-    moteurs.initialisationTimer0Pwm();
     Led led (&PORTB,0,1);
     eteindreLedVm(led);
     avancerMoteurVm(128, moteurs);
     moteurs.avancerMoteur(50,50);
     
     //sonnerie.initialisationTimer1CtcVm(timer1); Probleme avec init timer, demander a coequipier
-    cli();
-    TCNT1 = 0;
-    TCCR1A = 0; //(1 << COM1A0);
-    TCCR1B = (1 << WGM12) | (1 << CS11); // CTC mode with 8 prescaler
-    TCCR1C = 0;
-    TIMSK1 = (1 << OCIE1A);
-    sei();
+    // cli();
+    // TCNT1 = 0;
+    // TCCR1A = 0; //(1 << COM1A0);
+    // TCCR1B = (1 << WGM12) | (1 << CS11); // CTC mode with 8 prescaler
+    // TCCR1C = 0;
+    // TIMSK1 = (1 << OCIE1A);
+    // sei();
     sonnerie.jouerSonnerieVm(65);
     _delay_ms(1000);
     allumerLedVm(led);

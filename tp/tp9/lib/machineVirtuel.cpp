@@ -44,14 +44,6 @@ void tournerGaucheMoteurVm (Moteur& moteurs) {
     _delay_ms(50); // voir tournerDroite
     moteurs.arreterMoteur();
 }
-// // configuration comme ca, pas final
-// Led led1 (&PORTA,0,1);
-// Led led2 (&PORTA,2,3);
-// Led led3 (&PORTA,4,5);
-// Led led4 (&PORTA,6,7);
-// Led led5 (&PORTB,0,1);
-// Led led6 (&PORTB,6,7); // skip PORTB 2,3,4,5 pour ne pas creer de conflit avec moteurs
-// Led led7 (&PORTC,0,1);
 
 void allumerLedVm(Led& led){
     led.allumerRougeLed();
@@ -149,12 +141,30 @@ void attendreVm (const uint8_t operande) {
 
 // Sonnerie 
 
-void Sonnerie::initialisationTimer1CtcVm (Timer1& timer1) {
-    timer1.setWaveform(Waveform::CTC);
-    timer1.setCompareOutput(CompareOutput::TOGGLE);
-    timer1.setPrescaler(PRESCALER);
-    timer1.setInterupts(true, false, false); // compare A
+Sonnerie::Sonnerie(){
+    initialisationTimer1CtcVm ();
+}
+
+Sonnerie::~Sonnerie(){
+    cli();
+    TCCR1A = TCCR1B = TIMSK1 = 0;
+    sei();
+}
+
+void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
+    // timer1.setWaveform(Waveform::CTC);
+    // timer1.setCompareOutput(CompareOutput::TOGGLE);
+    // timer1.setPrescaler(PRESCALER);
+    // timer1.setInterupts(true, false, false); // compare A
+    // TCNT1 = 0;
+     cli();
     TCNT1 = 0;
+    TCCR1A = 0; //(1 << COM1A0);
+    TCCR1B = (1 << WGM12) | (1 << CS11); // CTC mode with 8 prescaler
+    TCCR1C = 0;
+    TIMSK1 = (1 << OCIE1A);
+    sei();
+
 }
 
 void Sonnerie::jouerSonnerieVm (uint8_t note){

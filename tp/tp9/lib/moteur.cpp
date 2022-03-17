@@ -31,6 +31,17 @@ void Moteur::initialisationTimer0Pwm(){
     TCCR0B = (1 << CS01);
     sei();
 }
+
+Moteur::Moteur(){
+    initialisationTimer0Pwm();
+}
+Moteur::~Moteur(){
+    cli();
+    DDRB &= ~((1 << PB2) | (1 << PB3) | (1 << PB4) | (1 << PB5));
+    TCCR0A = TCCR0B = 0;
+    sei();
+}
+
 /* Methode permet d'avancer les roues du moteurs 
 entrée : pourcentageOC0A,pourcentageOC0B
 */

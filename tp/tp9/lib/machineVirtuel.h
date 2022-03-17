@@ -36,13 +36,16 @@ void attendreVm (uint8_t operande);
 // Sonnerie
 class Sonnerie {
 public :
-    void initialisationTimer1CtcVm (Timer1& timer1);
+    Sonnerie ();
+    
+    ~Sonnerie ();
 
     void jouerSonnerieVm (uint8_t note);
 
     void arreterSonnerieVm ();
 
 private :
+    void initialisationTimer1CtcVm (/*Timer1& timer1*/);
     double frequencePwm_ = 0;
 
 };
