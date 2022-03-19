@@ -1,0 +1,4 @@
+dbt;
+att 8;
+dal 81;  // ceci est aussi un commentaire
+fin;

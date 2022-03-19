@@ -23,13 +23,13 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=Labo5.2
+PROJECTNAME=ecricremenoire
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-pb2.cpp
+PRJSRC= lireByteCode.cpp memoire_24.cpp rs232.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
 INC=

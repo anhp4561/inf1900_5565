@@ -23,20 +23,21 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=Labo5.2
+PROJECTNAME = ecrireMemoire
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-pb2.cpp
+PRJSRC= ecrireMemoire.cpp uart.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=
+INC=../src_lib
+
 
 # Libraires a lier (ex: -lmylib)
-LIBS=
-
+LIBS=-l sendhelp -L ../src_lib 
+#LIBS= ../src_lib/sendhelp
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
 OPTLEVEL=s
@@ -76,8 +77,8 @@ HEXFORMAT=ihex
 ####### Options de compilation #######
 
 # Flags pour le compilateur en C
-CFLAGS=-I. -I/usr/include/simavr  -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
-	-std=c++14 -fpack-struct -fshort-enums             \
+CFLAGS=-I $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
+	-fpack-struct -fshort-enums             \
 	-funsigned-bitfields -funsigned-char    \
 	-Wall                                        
 
@@ -92,7 +93,7 @@ LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
 ####### Cible (Target) #######
 
 #Nom des cibles par defaut
-TRG=$(PROJECTNAME).elf
+TRG=$(PROJECTNAME).out
 HEXROMTRG=$(PROJECTNAME).hex
 HEXTRG=$(HEXROMTRG) $(PROJECTNAME).ee.hex
 
@@ -128,7 +129,7 @@ OBJDEPS=$(CFILES:.c=.o) \
 
 # Make all permet simplement de compiler le projet
 #
-all: $(TRG) $(HEXROMTRG)
+all: $(TRG)
 
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
@@ -150,7 +151,7 @@ $(TRG): $(OBJDEPS)
 # http://bit.ly/2580FU8
 
 # Production des fichiers hex a partir des fichiers elf
-%.hex: %.elf
+%.hex: %.out
 	$(OBJCOPY) -j .text -j .data \
 		-O $(HEXFORMAT) $< $@
 
