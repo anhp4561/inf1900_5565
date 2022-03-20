@@ -7,9 +7,8 @@
 
 
 #define F_CPU 8000000
-#include <moteur.h>
 #include <util/delay.h>
-#define TAUX_25_MS 24 // 25 moins la marge d'erreur
+#define TAUX_25_MS 24 
 #define NB_BITS 8
 #define PREMIERE_NOTE 45
 #define RATIO_ROUE 50
@@ -35,5 +34,10 @@ public:
 	void arreterSonorite();
 
 	uint8_t puissanceDeux(uint8_t exposant);
+    void arreterMoteur();
+    void avancer(uint8_t ratio);
+    void reculer(uint8_t ratio);
+    void tournerDroite();
+    void tournerGauche();
 
 };

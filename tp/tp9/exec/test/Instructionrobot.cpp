@@ -9,7 +9,8 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include "moteur.h"
-#include "Instructionrobot.h"
+#include "sonnerie.h"
+#include <Instructionrobot.h>
 
  /****************************************************************************************************************************************************
   * Nom :         debut
@@ -137,37 +138,23 @@ void InstructionRobot::gererDel(uint8_t choixDel, bool choixAllume)
  ******************************************************************************************************************************************************************************/
 
 void InstructionRobot::jouerSonorite(int valeur) {
-
-
-	double frequence[37] = { 110,116.5409404,123.4708253,130.8127827,138.5913155, 146.832384, 155.5634919,164.8137785,174.6141157,
-	184.9972114,195.997718,207.6523488,220,233.0818808,246.9416506,261.6255653,277.182631,293.6647679,
-	311.1269837,329.6275569,349.2282314,369.9944227,391.995436,415.3046976,440,466.1637615,493.8833013,
-	523.2511306,554.365262,587.3295358,622.2539674,659.2551138,698.4564629,739.9888454,
-	783.990872,830.6093952,880 };
-
-
-	valeur -= PREMIERE_NOTE;// trouver l'indice de la note voulue dans le tableau de frequences
-
-	TCNT0 = 0;
-	TCCR0A |= (1 << WGM01) | (1 << COM0A0) | (1 << COM0B1);//mode PWM
-	TCCR0B |= (1 << CS02);
-	OCR0A = (F_CPU / (2 * DIVISEUR_FREQUENCE * frequence[valeur])) - 1;   //Formule documentation ATmega page 144
-
+Sonnerie sonnerie = Sonnerie();
+sonnerie.jouerSonnerieVm(valeur);
 
 }
 
 /******************************************************************************************************************************************************************************
  * Nom :         arreterSonorite
  * Description:  arreter la sonorite
- * Mn�monique:   sar
+ * Mnémonique:   sar
  * Code binaire: 0x09
- * Op�rande:     non
  * Retour:       void
  ******************************************************************************************************************************************************************************/
 
 void InstructionRobot::arreterSonorite() {
 
-	TCCR0A &= (0 << COM0A1);
+	Sonnerie sonnerie = Sonnerie();
+	sonnerie.arreterSonnerieVm();
 }
 
 /******************************************************************************************************************************************************************************
@@ -219,7 +206,7 @@ void InstructionRobot::avancer(uint8_t ratio) {
 
 	Moteur moteur = Moteur();
 
-	moteur.void Moteur::avancerMoteur(ratio,ratio);
+	moteur.avancerMoteur(ratio,ratio);
 
 }
 
@@ -266,4 +253,8 @@ void InstructionRobot::tournerGauche() {
 
 	moteur.tournerGaucheMoteur(100);
 
+}
+int main()
+{
+  return 0;
 }
