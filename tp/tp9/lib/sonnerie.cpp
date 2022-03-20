@@ -1,11 +1,10 @@
 
 #include "sonnerie.h"
-//#include <util/delay.h>
 const uint8_t PRESCALER = 8;
 // Sonnerie 
 
 Sonnerie::Sonnerie(){
-    initialisationTimer1CtcVm ();
+    initialisationTimer1Ctc ();
 }
 
 Sonnerie::~Sonnerie(){
@@ -14,7 +13,7 @@ Sonnerie::~Sonnerie(){
     sei();
 }
 
-void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
+void Sonnerie::initialisationTimer1Ctc () {
     TCNT1 = 0;
     TCCR1A = 0; //(1 << COM1A0);
     TCCR1B = (1 << WGM12) | (1 << CS11); // CTC mode with 8 prescaler
@@ -23,18 +22,18 @@ void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
 
 }
 
-void Sonnerie::jouerSonnerieVm (uint8_t note){
+void Sonnerie::jouerSonnerie (uint8_t note){ 
+uint8_t constante2Equation = 2;
     if (note >= 45 && note <= 81){
         uint16_t frequenceDefaut = 440;
-        uint8_t constante2Equation = 2;
-        uint8_t constanteSoustractionEquation = 69;
+        double constanteSoustractionEquation = 69.0;
         uint8_t constanteDivisionEquation = 12;
         frequencePwm_ = frequenceDefaut * pow(constante2Equation, (note-constanteSoustractionEquation) / constanteDivisionEquation);
     }
-    OCR1A = F_CPU / ( 2 * PRESCALER * frequencePwm_); 
+    OCR1A = F_CPU / ( constante2Equation * PRESCALER * frequencePwm_);  
 }
  
 
-void Sonnerie::arreterSonnerieVm () {
+void Sonnerie::arreterSonnerie () {
     OCR1A = 0;
 }

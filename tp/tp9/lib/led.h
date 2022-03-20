@@ -13,6 +13,7 @@
 class Led
 {
 public:
+    Led() = default;
     Led(volatile uint8_t *port, int ledPin1, int ledPin2);
     // fait all allumer la led rouge
     void allumerRougeLed();

@@ -8,12 +8,12 @@ public :
     
     ~Sonnerie ();
 
-    void jouerSonnerieVm (uint8_t note);
+    void jouerSonnerie (uint8_t note);
 
-    void arreterSonnerieVm ();
+    void arreterSonnerie ();
 
 private :
-    void initialisationTimer1CtcVm (/*Timer1& timer1*/);
+    void initialisationTimer1Ctc (/*Timer1& timer1*/);
     double frequencePwm_ = 0;
     
 };

@@ -146,12 +146,7 @@ Sonnerie::~Sonnerie(){
     sei();
 }
 
-void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
-    // timer1.setWaveform(Waveform::CTC);
-    // timer1.setCompareOutput(CompareOutput::TOGGLE);
-    // timer1.setPrescaler(PRESCALER);
-    // timer1.setInterupts(true, false, false); // compare A
-    // TCNT1 = 0;
+void Sonnerie::initialisationTimer1CtcVm () {
      cli();
     TCNT1 = 0;
     TCCR1A = (1 << COM1A0);
@@ -161,15 +156,15 @@ void Sonnerie::initialisationTimer1CtcVm (/*Timer1& timer1*/) {
 
 }
 
-void Sonnerie::jouerSonnerieVm (uint8_t note){ // a ameliorer, trop de doubles
+void Sonnerie::jouerSonnerieVm (uint8_t note){ 
+uint8_t constante2Equation = 2;
     if (note >= 45 && note <= 81){
-        double frequenceDefaut = 440;
-        double constante2Equation = 2.0;
+        uint16_t frequenceDefaut = 440;
         double constanteSoustractionEquation = 69.0;
-        double constanteDivisionEquation = 12.0;
+        uint8_t constanteDivisionEquation = 12;
         frequencePwm_ = frequenceDefaut * pow(constante2Equation, (note-constanteSoustractionEquation) / constanteDivisionEquation);
     }
-    OCR1A = F_CPU / ( 2 * PRESCALER * frequencePwm_);  
+    OCR1A = F_CPU / ( constante2Equation * PRESCALER * frequencePwm_);  
 }
  
 
