@@ -41,7 +41,7 @@ int main () {
     Led led5 (&PORTB,0,1);
     Led led6 (&PORTB,6,7); // Sauter PORTB 2,3,4,5 pour ne pas creer de conflit avec moteurs
     Led led7 (&PORTC,0,1);
-    uint16_t adresseDebutBoucle;
+    uint16_t adresseDebutBoucle = 0x0000;
     uint8_t nombreIteration = -1;
     uint16_t adresseLecture = 0x0000;//initialisation pour écrire à la premère adresse mémoire
     while(true){
@@ -135,7 +135,7 @@ int main () {
                             led7.eteindreLed();
                             break;
                         default: // Si une seule DEL est utilisée, l'opérande est ignoré (mais présent).
-                            led1.allumerRougeLed();
+                            led1.eteindreLed();
                             break;
                     }
 
@@ -190,19 +190,22 @@ int main () {
 
                 case DEBUT_BOUCLE: // mettre error pour catch boucle imbriquer ou faire un bool dansBoucle.
                     if (dansBoucle == false){
-                        adresseLecture = adresseDebutBoucle + 0x10;
+                        adresseDebutBoucle = adresseLecture + 0x10;
                         nombreIteration = operandeBytecode;
                         dansBoucle = true;
                     }
+                    else if (dansBoucle == true)
+                        adresseLecture += 0x10;
                     break;
 
                 case FIN_BOUCLE:
                     if (nombreIteration >= 0){
-                        adresseLecture = adresseDebutBoucle + 0x10;
+                        adresseLecture = adresseDebutBoucle;
                         nombreIteration--;
                     }
                     else if (nombreIteration <= -1){
                         dansBoucle = false;
+                        adresseLecture += 0x10;
                     }
                     break;
 
