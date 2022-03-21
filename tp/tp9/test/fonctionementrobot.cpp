@@ -13,25 +13,6 @@
 
 #define ADRESSE_DEBUT_DONNE 0x02
 
-enum Instruction
-{
-	DBT = 0x01,
-	ATT = 0b00000010,
-	DAL = 0b01000100,
-	DET = 0b01000101,
-	MON = 0b00011000,
-	MOF = 0b00011001,
-	MAR = 0b01100000,
-	MARR = 0b01100001, //Nom différent, mais c'est aussi MAR
-	MAV = 0b01100010,
-	MRE = 0b01100011,
-	TRD = 0b01100100,
-	TRG = 0b01100101,
-	DBC = 0b11000000,
-	FBC = 0b11000001,
-	FIN = 0b11111111
-
-};
 
 int main()
 {

@@ -139,7 +139,7 @@ void InstructionRobot::gererDel(uint8_t choixDel, bool choixAllume)
 
 void InstructionRobot::jouerSonorite(int valeur) {
 Sonnerie sonnerie = Sonnerie();
-sonnerie.jouerSonnerieVm(valeur);
+sonnerie.jouerSonnerie(valeur);
 
 }
 
@@ -154,7 +154,7 @@ sonnerie.jouerSonnerieVm(valeur);
 void InstructionRobot::arreterSonorite() {
 
 	Sonnerie sonnerie = Sonnerie();
-	sonnerie.arreterSonnerieVm();
+	sonnerie.arreterSonnerie();
 }
 
 /******************************************************************************************************************************************************************************
@@ -253,8 +253,4 @@ void InstructionRobot::tournerGauche() {
 
 	moteur.tournerGaucheMoteur(100);
 
-}
-int main()
-{
-  return 0;
 }

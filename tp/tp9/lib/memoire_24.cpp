@@ -24,7 +24,7 @@
 /*                                                                            */
 /*                                                                            */
 /******************************************************************************/
-
+#define F_CPU 8000000
 #ifndef F_CPU
 /* fournir un avertissement mais non une erreur */
 # warning "F_CPU pas defini pour 'memoire_24.cpp'"
@@ -264,7 +264,9 @@ uint8_t Memoire24CXXX::lecture(const uint16_t adresse, uint8_t *donnee,
   TWDR =  m_adresse_peripherique + 1;  // Controle - bit 0 a 1, lecture
   TWCR = _BV(TWINT) | _BV(TWEN);       // R. a Z., interrupt. - Depart de transm.
   while ((TWCR & _BV(TWINT)) == 0)     // Attente de fin de transmission
-     ;
+     {
+    /* other code */
+   }
 
   //________________________ Lecture de l'eeprom __________________________
   // La memoire transmet 8 bits de donnee et le recepteur transmet un
@@ -277,7 +279,8 @@ uint8_t Memoire24CXXX::lecture(const uint16_t adresse, uint8_t *donnee,
       if (longueur == 1)
          twcr = _BV(TWINT) | _BV(TWEN);  // Derniere donnee, NACK
       TWCR = twcr;                       // R. a Z., interrupt. - Depart de transm.
-      while ((TWCR & _BV(TWINT)) == 0) ; // Attente de fin de transmission
+      while ((TWCR & _BV(TWINT)) == 0) {}
+ // Attente de fin de transmission
          *donnee++ = TWDR;               // Lecture
   }
 

@@ -1,21 +1,20 @@
-/******************************************************************************/
-/*                                                                            */
-/* Isidore Lauzier - 9 juillet 2005                                           */
-/*                                                                            */
-/* Cet exemple d'utilisation d'une memoire eeprom i2c est une modification du */
-/* programme de Joerg Wunsch twitest.c fourni avec Winavr. Il est compatible  */
-/* aux eeprom 24C128, 24C256 et 24c512. Ce programme a ete simplifie afin     */
-/* d'illustrer la programmation du bus TWI et des memoires I2C.               */
-/*                                                                            */
-/* NOTE IMPORTANTE: Le protocule I2C utilise les broches C0 et C1 sur un      */
-/*                  microcontroleur Atmel ATMega16.                           */
-/*                                                                            */
-/* Modifications mineures:                                                    */
-/*   - Pour refaire l'indentation - ete 2007 - Jerome Collin                  */
-/*   - Pour preciser les broches utilisees - novembre 2008 - Jerome Collin    */
-/*   - ajouts de commentaires - septembre 2017 - Jerome Collin
-/*                                                                            */
-/******************************************************************************/
+ /******************************************************************************
+*                                                                            
+* Isidore Lauzier - 9 juillet 2005                                           
+*                                                                            
+* Cet exemple d'utilisation d'une memoire eeprom i2c est une modification du 
+* programme de Joerg Wunsch twitest.c fourni avec Winavr. Il est compatible  
+* aux eeprom 24C128, 24C256 et 24c512. Ce programme a ete simplifie afin     
+* d'illustrer la programmation du bus TWI et des memoires I2C.               
+*                                                                            
+* NOTE IMPORTANTE: Le protocule I2C utilise les broches C0 et C1 sur un      
+*                  microcontroleur Atmel ATMega16.                           
+*                                                                            
+* Modifications mineures:                                                    
+*   - Pour refaire l'indentation - ete 2007 - Jerome Collin                  
+*   - Pour preciser les broches utilisees - novembre 2008 - Jerome Collin   
+*   - ajouts de commentaires - septembre 2017 - Jerome Collin
+  ******************************************************************************/
 
 #ifndef MEMOIRE_24_H
 #define MEMOIRE_24_H
