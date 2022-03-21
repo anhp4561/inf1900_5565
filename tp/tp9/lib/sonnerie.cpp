@@ -14,8 +14,9 @@ Sonnerie::~Sonnerie(){
 }
 
 void Sonnerie::initialisationTimer1Ctc () {
+    cli();
     TCNT1 = 0;
-    TCCR1A = 0; //(1 << COM1A0);
+    TCCR1A = (1 << COM1A0);
     TCCR1B = (1 << WGM12) | (1 << CS11); // CTC mode with 8 prescaler
     TCCR1C = 0;
     sei();
