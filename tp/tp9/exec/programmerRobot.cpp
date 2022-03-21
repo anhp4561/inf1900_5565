@@ -18,7 +18,7 @@ int main () {
     int n = sprintf(tampon,"La valeur de tailleCode est : %d\n", tailleCode);
     DEBUG_PRINT(tampon, n);
     while (adresseEcriture < adresseEcritureFinal){
-        donnee = receptionUart();//reception des données à écrire (un octet à la fois)
+        uint8_t donnee = receptionUart();//reception des données à écrire (un octet à la fois)
 		memoire.ecriture(adresseEcriture, donnee);//écriture de la donnée reçu à l'adresse actuelle
 		adresseEcriture += 0x08; // passe au prochain byte
     }
