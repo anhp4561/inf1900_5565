@@ -1,6 +1,11 @@
 dbt;
 dal 1;
 att 10;
+det 1;
 sgo 69 ;# émettre un son à 440 Hz
-sgo 45; 
+att 100;
+sgo 45;
+att 100; 
+mav 128;
+trd;
 fin;

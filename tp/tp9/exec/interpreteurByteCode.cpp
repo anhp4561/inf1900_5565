@@ -38,90 +38,90 @@ int main () {
     uint16_t adresseDebutBoucle = 0x0000;
     uint8_t nombreIteration = -1;
     uint16_t adresseLecture = 0x0000;//initialisation pour écrire à la premère adresse mémoire
+    uint8_t instructionByteCode;
+    uint8_t operandeBytecode;
     while(true){
-
-        uint8_t instructionByteCode;
         memoire.lecture(adresseLecture, &instructionByteCode); // pas encore sur de l'utilisation de lecture
-        uint8_t operandeBytecode;
+        adresseLecture +=0x01;
         memoire.lecture(adresseLecture, &operandeBytecode); // pas encore sur de l'utilisation de lecture
         if (enMarche == true || instructionByteCode == DEBUT) { // mis == true pour que ca soit plus claire
             switch (instructionByteCode){
                 case DEBUT:
                     enMarche = true;
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ATTENDRE:
                     for (int i = 0; i <  operandeBytecode ; i++){
                         _delay_ms(MULTIPLICATEUR_DELAI); 
                     }
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ALLUMER_DEL:
                     led1.allumerRougeLed();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ETEINDRE_DEL:
                     led1.eteindreLed();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case JOUER_SON:
                     sonnerie.jouerSonnerie(operandeBytecode);
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ARRETER_SON:
                     sonnerie.arreterSonnerie();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ARRETER_MOTEUR1:
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case ARRETER_MOTEUR2:
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case AVANCER_MOTEUR:
                     operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
                     moteurs.avancerMoteur(operandeBytecode,  operandeBytecode);
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case RECULER_MOTEUR:
                     operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
                     moteurs.reculerMoteur(operandeBytecode, operandeBytecode);
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case TOURNER_DROITE_MOTEUR:
                     moteurs.tournerDroiteMoteur(POURCENTAGE_PWM_MOTEUR);
-                    _delay_ms (50);
+                    _delay_ms (333);
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case TOURNER_GAUCHE_MOTEUR:
                     moteurs.tournerDroiteMoteur(POURCENTAGE_PWM_MOTEUR);
-                    _delay_ms (50);
+                    _delay_ms (333);
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x10;
+                    adresseLecture += 0x01;
                     break;
 
                 case DEBUT_BOUCLE: // mettre error pour catch boucle imbriquer ou faire un bool dansBoucle.
                     if (dansBoucle == false){
-                        adresseDebutBoucle = adresseLecture + 0x10;
+                        adresseDebutBoucle = adresseLecture + 0x01;
                         nombreIteration = operandeBytecode;
                         dansBoucle = true;
                     }
                     else if (dansBoucle == true)
-                        adresseLecture += 0x10;
+                        adresseLecture += 0x01;
                     break;
 
                 case FIN_BOUCLE:
@@ -131,7 +131,7 @@ int main () {
                     }
                     else if (nombreIteration <= -1){
                         dansBoucle = false;
-                        adresseLecture += 0x10;
+                        adresseLecture += 0x01;
                     }
                     break;
 
