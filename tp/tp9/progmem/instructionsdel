@@ -1,0 +1,13 @@
+DAL 1;
+ATT 10;
+DET 1;
+ATT 10:
+DBT;
+DAL 1;
+ATT 10;
+DET 1;
+ATT 10;
+FIN;
+DAL 1;
+ATT 10;
+DEL 1;
