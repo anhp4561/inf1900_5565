@@ -2,4 +2,6 @@ dbt;
 dal 1;
 att 10;
 det 1;
+sgo 54 ;% jouer un son à 180 Hz
+sar ;# arrêter de jouer un son
 fin;
