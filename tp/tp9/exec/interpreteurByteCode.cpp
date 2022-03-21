@@ -46,26 +46,26 @@ int main () {
     uint16_t adresseLecture = 0x0000;//initialisation pour écrire à la premère adresse mémoire
     while(true){
 
-        uint8_t* instructionBytecode;
-        memoire.lecture(adresseLecture, instructionBytecode); // pas encore sur de l'utilisation de lecture
-        uint8_t* operandeBytecode;
-        memoire.lecture(adresseLecture, operandeBytecode); // pas encore sur de l'utilisation de lecture
-        if (enMarche == true || *instructionBytecode == DEBUT) { // mis == true pour que ca soit plus claire
-            switch (*instructionBytecode){
+        uint8_t instructionByteCode;
+        memoire.lecture(adresseLecture, &instructionByteCode); // pas encore sur de l'utilisation de lecture
+        uint8_t operandeBytecode;
+        memoire.lecture(adresseLecture, &operandeBytecode); // pas encore sur de l'utilisation de lecture
+        if (enMarche == true || instructionByteCode == DEBUT) { // mis == true pour que ca soit plus claire
+            switch (instructionByteCode){
                 case DEBUT:
                     enMarche = true;
                     adresseLecture += 0x10;
                     break;
 
                 case ATTENDRE:
-                    for (int i = 0; i < *operandeBytecode ; i++){
+                    for (int i = 0; i <  operandeBytecode ; i++){
                         _delay_ms(MULTIPLICATEUR_DELAI); 
                     }
                     adresseLecture += 0x10;
                     break;
 
                 case ALLUMER_DEL:
-                    switch (*operandeBytecode) { // Anh (message pour oscar) : J'ai remis les switchs cases pcq si l'operande = 0x03, ca va allumer led1 et led2.
+                    switch (operandeBytecode) { // Anh (message pour oscar) : J'ai remis les switchs cases pcq si l'operande = 0x03, ca va allumer led1 et led2.
                         case 1 :
                             led1.allumerRougeLed();
                             break;
@@ -104,7 +104,7 @@ int main () {
                     break;
 
                 case ETEINDRE_DEL:
-                    switch (*operandeBytecode) {
+                    switch (operandeBytecode) {
                         case 1 :
                             led1.eteindreLed();
                             break;
@@ -144,7 +144,7 @@ int main () {
                     break;
 
                 case JOUER_SON:
-                    sonnerie.jouerSonnerie(*operandeBytecode);
+                    sonnerie.jouerSonnerie(operandeBytecode);
                     adresseLecture += 0x10;
                     break;
 
@@ -164,14 +164,14 @@ int main () {
                     break;
 
                 case AVANCER_MOTEUR:
-                    *operandeBytecode = *operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
-                    moteurs.avancerMoteur(*operandeBytecode, *operandeBytecode);
+                    operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
+                    moteurs.avancerMoteur(operandeBytecode,  operandeBytecode);
                     adresseLecture += 0x10;
                     break;
 
                 case RECULER_MOTEUR:
-                    *operandeBytecode = *operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
-                    moteurs.reculerMoteur(*operandeBytecode, *operandeBytecode);
+                    operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
+                    moteurs.reculerMoteur(operandeBytecode, operandeBytecode);
                     adresseLecture += 0x10;
                     break;
 
@@ -192,7 +192,7 @@ int main () {
                 case DEBUT_BOUCLE: // mettre error pour catch boucle imbriquer ou faire un bool dansBoucle.
                     if (dansBoucle == false){
                         adresseDebutBoucle = adresseLecture + 0x10;
-                        nombreIteration = *operandeBytecode;
+                        nombreIteration = operandeBytecode;
                         dansBoucle = true;
                     }
                     else if (dansBoucle == true)

@@ -3,12 +3,12 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
-// #include "led.h"
+#include "led.h"
 #include "rs232.h"
-// #include "bouton.h"
-// #include "moteur.h"
+#include "bouton.h"
+#include "moteur.h"
 #include "debug.h"
-#include "machineVirtuel.h"
+#include "sonnerie.h"
 
 volatile bool basculeTimer = false;
 
@@ -73,26 +73,64 @@ transmissionUartString(mots);
     initialisationUart();
     DDRD = 0xff;
     Sonnerie sonnerie = Sonnerie();
-    Moteur moteurs;
-    Led led (&PORTB,0,1);
-    eteindreLedVm(led);
-    avancerMoteurVm(128, moteurs);
-    moteurs.avancerMoteur(50,50);
-    sonnerie.jouerSonnerieVm(65);
-    _delay_ms(1000);
-    allumerLedVm(led);
-    sonnerie.jouerSonnerieVm(75);
-    _delay_ms(1000);
-    sonnerie.jouerSonnerieVm(81);
-    _delay_ms(1000);
-    sonnerie.arreterSonnerieVm();
-    sonnerie.jouerSonnerieVm(45);
-    _delay_ms(1000);
-    sonnerie.jouerSonnerieVm(55);
-    _delay_ms(1000);
-    avancerMoteurVm(128, moteurs);
-    _delay_ms(10000);
-    
+    // Moteur moteurs;
+    // Led led (&PORTB,0,1);
+    // moteurs.avancerMoteur(100,100);
+    // sonnerie.jouerSonnerie(65);
+    // _delay_ms(1000);
+    // sonnerie.jouerSonnerie(75);
+    // _delay_ms(1000);
+    // sonnerie.jouerSonnerie(81);
+    // _delay_ms(1000);
+    // sonnerie.arreterSonnerie();
+    // sonnerie.jouerSonnerie(45);
+    // _delay_ms(1000);
+    // sonnerie.jouerSonnerie(55);
+    // _delay_ms(1000);
+    // moteurs.avancerMoteur(50,50);
+    // _delay_ms(10000);
+
+    // theme de tetris
+    sonnerie.jouerSonnerie(76);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(71);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(74);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(71);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(69);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(69);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(76);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(74);
+    _delay_ms(250);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(300);
+    sonnerie.jouerSonnerie(71);
+    _delay_ms(550);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(74);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(76);
+    _delay_ms(450);
+    sonnerie.jouerSonnerie(72);
+    _delay_ms(550);
+    sonnerie.jouerSonnerie(69);
+    _delay_ms(250);
+    sonnerie.arreterSonnerie();
+    _delay_ms(75);
+    sonnerie.jouerSonnerie(69);
+    _delay_ms(250);
 
 #endif
 
