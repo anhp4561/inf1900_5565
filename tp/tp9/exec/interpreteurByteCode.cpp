@@ -5,10 +5,11 @@
 * Equipe # : 5565
 * Correcteur : Ghali chraibi ,	Charles Jiang 
 * date : 21-03-2022
-* Description : Classe permettant le controle des deux moteurs du robot
- */
+* Description : Code permettant l'interpretation d'un bytecode
+*/
+
 #define F_CPU 8000000
-#include <avr/io.h>
+#include <avr/io.h> 
 #include <stdio.h>
 #include "debug.h"
 #include "memoire_24.h"
@@ -33,26 +34,35 @@ const uint8_t DEBUT = 0x01,
               FIN = 0xFF,
               MULTIPLICATEUR_DELAI = 25,
               POURCENTAGE_PWM_MOTEUR = 100,
-              VALEUR_MAX_TIMER0 = 255, 
+              VALEUR_MAX_TIMER0 = 255,
               UN_BYTE = 0x01;
 
-int main(){
+
+int main () {
+    DDRD = 0xff;
     bool enMarche = false;
     bool dansBoucle = false;
+    bool estTermine = false;
     Memoire24CXXX memoire;
     Sonnerie sonnerie;
     Moteur moteurs;
-    // Configuration des Leds :
-    Led led1(&PORTA, 0, 1);
+    // Configuration des Leds : 
+    Led led1 (&PORTA,0,1);
     uint16_t adresseDebutBoucle = 0x0000;
     uint8_t nombreIteration = -1;
     uint16_t adresseLecture = 0x0000; //initialisation pour écrire à la premère adresse mémoire
-    while (true) {
-        uint8_t instructionByteCode;
+    uint8_t instructionByteCode;
+    uint8_t operandeBytecode;
+    while(true){
+        if (estTermine == true)
+            break;
+        char tampon[50];
+        int n = sprintf(tampon,"address est : %d\n", adresseLecture);
+        DEBUG_PRINT(tampon, n);
         memoire.lecture(adresseLecture, &instructionByteCode); 
-        uint8_t operandeBytecode;
+        adresseLecture +=UN_BYTE;
         memoire.lecture(adresseLecture, &operandeBytecode); 
-        if (enMarche == true || instructionByteCode == DEBUT){ 
+        if (enMarche == true || instructionByteCode == DEBUT) { // mis == true pour que ca soit plus claire
             switch (instructionByteCode){
                 case DEBUT:
                     enMarche = true;
@@ -122,7 +132,7 @@ int main(){
                     adresseLecture += UN_BYTE;
                     break;
 
-                case DEBUT_BOUCLE: // mettre error pour catch boucle imbriquer ou faire un bool dansBoucle.
+                case DEBUT_BOUCLE: 
                     if (dansBoucle == false){
                         adresseDebutBoucle = adresseLecture + UN_BYTE;
                         nombreIteration = operandeBytecode;

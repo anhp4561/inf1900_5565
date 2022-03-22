@@ -25,6 +25,6 @@ public:
     void arreterSonnerie();
 
 private:
-    void initialisationTimer1Ctc(/*Timer1& timer1*/);
+    void initialisationTimer1Ctc();
     double frequencePwm_ = 0;
 };
