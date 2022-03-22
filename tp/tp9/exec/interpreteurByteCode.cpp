@@ -24,12 +24,15 @@ FIN_BOUCLE = 0xC1,
 FIN = 0xFF,
 MULTIPLICATEUR_DELAI = 25,
 POURCENTAGE_PWM_MOTEUR = 100,
-VALEUR_MAX_TIMER0 = 255;
+VALEUR_MAX_TIMER0 = 255,
+UN_BYTE = 0x01;
 
 
 int main () {
+    DDRD = 0xff;
     bool enMarche = false;
     bool dansBoucle = false;
+    bool estTermine = false;
     Memoire24CXXX memoire;
     Sonnerie sonnerie;
     Moteur moteurs;
@@ -41,102 +44,108 @@ int main () {
     uint8_t instructionByteCode;
     uint8_t operandeBytecode;
     while(true){
+        if (estTermine == true)
+            break;
+        char tampon[50];
+        int n = sprintf(tampon,"address est : %d\n", adresseLecture);
+        DEBUG_PRINT(tampon, n);
         memoire.lecture(adresseLecture, &instructionByteCode); // pas encore sur de l'utilisation de lecture
-        adresseLecture +=0x01;
+        adresseLecture +=UN_BYTE;
         memoire.lecture(adresseLecture, &operandeBytecode); // pas encore sur de l'utilisation de lecture
         if (enMarche == true || instructionByteCode == DEBUT) { // mis == true pour que ca soit plus claire
             switch (instructionByteCode){
                 case DEBUT:
                     enMarche = true;
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ATTENDRE:
                     for (int i = 0; i <  operandeBytecode ; i++){
                         _delay_ms(MULTIPLICATEUR_DELAI); 
                     }
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ALLUMER_DEL:
                     led1.allumerRougeLed();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ETEINDRE_DEL:
                     led1.eteindreLed();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case JOUER_SON:
                     sonnerie.jouerSonnerie(operandeBytecode);
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ARRETER_SON:
                     sonnerie.arreterSonnerie();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ARRETER_MOTEUR1:
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case ARRETER_MOTEUR2:
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case AVANCER_MOTEUR:
                     operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
                     moteurs.avancerMoteur(operandeBytecode,  operandeBytecode);
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case RECULER_MOTEUR:
                     operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
                     moteurs.reculerMoteur(operandeBytecode, operandeBytecode);
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case TOURNER_DROITE_MOTEUR:
                     moteurs.tournerDroiteMoteur(POURCENTAGE_PWM_MOTEUR);
-                    _delay_ms (333);
+                    _delay_ms (1000);
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case TOURNER_GAUCHE_MOTEUR:
                     moteurs.tournerDroiteMoteur(POURCENTAGE_PWM_MOTEUR);
-                    _delay_ms (333);
+                    _delay_ms (1000);
                     moteurs.arreterMoteur();
-                    adresseLecture += 0x01;
+                    adresseLecture += UN_BYTE;
                     break;
 
                 case DEBUT_BOUCLE: // mettre error pour catch boucle imbriquer ou faire un bool dansBoucle.
                     if (dansBoucle == false){
-                        adresseDebutBoucle = adresseLecture + 0x01;
+                        adresseDebutBoucle = adresseLecture + UN_BYTE;
                         nombreIteration = operandeBytecode;
                         dansBoucle = true;
                     }
                     else if (dansBoucle == true)
-                        adresseLecture += 0x01;
+                        adresseLecture += UN_BYTE;
                     break;
 
                 case FIN_BOUCLE:
-                    if (nombreIteration >= 0){
+                    if (nombreIteration > 0){
                         adresseLecture = adresseDebutBoucle;
                         nombreIteration--;
                     }
                     else if (nombreIteration <= -1){
                         dansBoucle = false;
-                        adresseLecture += 0x01;
+                        adresseLecture += UN_BYTE;
                     }
                     break;
 
                 case FIN:
                     enMarche = false;
+                    estTermine = true;
                     break;
             }
         }

@@ -1,11 +1,72 @@
 dbt;
+#dal 1;
+#att 10;
+#det 1;
+#sgo 69 ;# émettre un son à 440 Hz
+#att 100;
+#sgo 45;
+#att 100; 
+#mav 128;
+#trd;
+#fin;
+
+
+# mav 128;
+# dbc 5;
+# sgo 76;
+# att 18;
+# sgo 71;
+# att 10;
+# sgo 72;
+# att 10;
+# sgo 74;
+# att 18;
+# sgo 72;
+# att 10;
+# sgo 71;
+# att 10;
+# sgo 69;
+# att 18;
+# sgo 69;
+# att 10;
+# sgo 72;
+# att 10;
+# sgo 76;
+# att 18;
+# sgo 74;
+# att 10;
+# sgo 72;
+# att 12;
+# sgo 71;
+# att 22;
+# sgo 72;
+# att 18;
+# sgo 74;
+# att 18;
+# sgo 76;
+# att 18;
+# sgo 72;
+# att 22;
+# sgo 69;
+# att 10;
+# sar;
+# att 3;
+# sgo 69;
+# att 10;
+# mar;
+# fbc;
+
+
 dal 1;
-att 10;
-det 1;
-sgo 69 ;# émettre un son à 440 Hz
+mav 255;
 att 100;
-sgo 45;
-att 100; 
-mav 128;
 trd;
+mre 255;
+att 100;
+mre 128;
+att 200;
+trg;
+mre 128;
+att 200;
+det 1;
 fin;

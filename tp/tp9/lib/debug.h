@@ -16,12 +16,7 @@ void initUart();
 void debugPrint(char x[], uint8_t taille);
 
 #ifdef DEBUG
-#ifdef INIT
 #define DEBUG_PRINT(x, taille) initUart(); debugPrint(x, taille) // Si vous definissez transmissionUART par vous memes, vous devez « undefine » INIT manuellement
-#undef INIT
-#else
-#define DEBUG_PRINT(x, taille) debugPrint(x, taille)
-#endif
 #else
 #define DEBUG_PRINT(x, taille) do{} while (0) // code mort
 #endif
