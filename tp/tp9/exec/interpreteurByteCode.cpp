@@ -116,8 +116,8 @@ int main () {
                     break;
 
                 case TOURNER_GAUCHE_MOTEUR:
-                    moteurs.tournerDroiteMoteur(POURCENTAGE_PWM_MOTEUR);
-                    _delay_ms (1000);
+                    moteurs.tournerGaucheMoteur(POURCENTAGE_PWM_MOTEUR);
+                    _delay_ms (1200);
                     moteurs.arreterMoteur();
                     adresseLecture += UN_BYTE;
                     break;
