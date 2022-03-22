@@ -14,7 +14,8 @@
 #include "moteur.h"
 /* Methode permet l`ìnitialisation du PMW
 */
-void Moteur::initialisationTimer0Pwm(){
+void Moteur::initialisationTimer0Pwm()
+{
     cli();
     // Justification pour le registre de direction B :
     // On utilise le timer0 pour generer les pwms.
@@ -32,54 +33,93 @@ void Moteur::initialisationTimer0Pwm(){
     sei();
 }
 
-Moteur::Moteur(){
+/****************************************************************************************************************************************************
+  * Nom :         Moteur()
+  * Description:  constructeur
+  * entree:       
+  * Retour:       moteur
+  ***************************************************************************************************************************************************/
+Moteur::Moteur()
+{
     initialisationTimer0Pwm();
 }
-Moteur::~Moteur(){
+
+/****************************************************************************************************************************************************
+  * Nom :         ~Moteur(()
+  * Description:  destructeur
+  * entree:       
+  * Retour:       moteur
+  ***************************************************************************************************************************************************/
+Moteur::~Moteur()
+{
     cli();
     DDRB &= ~((1 << PB2) | (1 << PB3) | (1 << PB4) | (1 << PB5));
     TCCR0A = TCCR0B = 0;
     sei();
 }
-
-/* Methode permet d'avancer les roues du moteurs 
-entrée : pourcentageOC0A,pourcentageOC0B
-*/
-void Moteur::avancerMoteur(int pourcentageOC0A, int pourcentageOC0B){
+/****************************************************************************************************************************************************
+  * Nom :         avancerMoteur
+  * Description:  Methode permet d'avancer les roues du moteurs
+  * entree:       pourcentageOC0A,pourcentageOC0B
+  * Retour:       void
+  ***************************************************************************************************************************************************/
+void Moteur::avancerMoteur(int pourcentageOC0A, int pourcentageOC0B)
+{
     PORTB &= ~(1 << PB2 | 1 << PB5);
     reglerVitesseMoteur(pourcentageOC0A, pourcentageOC0B);
 }
-/* Methode permet de reculer les roues du moteurs 
-entrée : pourcentageOC0A,pourcentageOC0B
-*/
-void Moteur::reculerMoteur(int pourcentageOC0A, int pourcentageOC0B){
+/****************************************************************************************************************************************************
+  * Nom :         reculerMoteur
+  * Description:  Methode permet de reculer les roues du moteurs 
+  * entree:       pourcentageOC0A,pourcentageOC0B
+  * Retour:       void
+  ***************************************************************************************************************************************************/
+void Moteur::reculerMoteur(int pourcentageOC0A, int pourcentageOC0B)
+{
     PORTB |= (1 << PB2 | 1 << PB5);
     reglerVitesseMoteur(pourcentageOC0A, pourcentageOC0B);
 }
-/* Methode permet de trouver a gauche le roues du moteurs 
-entrée : pourcentageOC0A,pourcentageOC0B
-*/
-void Moteur::tournerGaucheMoteur(int pourcentageOC0B){
+/****************************************************************************************************************************************************
+  * Nom :         tournerGaucheMoteur
+  * Description:  Methode permet de trouver a gauche le roues du moteurs 
+  * entree:       pourcentageOC0B
+  * Retour:       void
+  ***************************************************************************************************************************************************/
+void Moteur::tournerGaucheMoteur(int pourcentageOC0B)
+{
     PORTB &= ~(1 << PB5);
     reglerVitesseMoteur(0, pourcentageOC0B);
 }
-/* Methode permet de tourner a droite le roues du moteurs 
-entrée : pourcentageOC0A
-*/
-void Moteur::tournerDroiteMoteur(int pourcentageOC0A){
+/****************************************************************************************************************************************************
+  * Nom :         tournerDroiteMoteur
+  * Description:  Methode permet de trouver a droite le roues du moteurs 
+  * entree:       pourcentageOC0B
+  * Retour:       void
+  ***************************************************************************************************************************************************/
+void Moteur::tournerDroiteMoteur(int pourcentageOC0A)
+{
     PORTB &= ~(1 << PB2);
     reglerVitesseMoteur(pourcentageOC0A, 0);
 }
-/* Methode permet d`arreter le moteurs
-*/
-void Moteur::arreterMoteur(){
+/****************************************************************************************************************************************************
+  * Nom :         arreterMoteur
+  * Description:  Methode permet d`arreter le moteurs 
+  * entree:       
+  * Retour:       
+  ***************************************************************************************************************************************************/
+void Moteur::arreterMoteur()
+{
     OCR0A = 0;
     OCR0B = 0;
 }
-/* Methode permet de regler la vitesse du moteurs 
-entrée : pourcentageOC0A,pourcentageOC0B
-*/
-void Moteur::reglerVitesseMoteur(int pourcentageOC0A, int pourcentageOC0B){
+/****************************************************************************************************************************************************
+  * Nom :         reglerVitesseMoteur
+  * Description:  Methode permet de regler la vitesse du moteurs 
+  * entree:       pourcentageOC0A,pourcentageOC0B
+  * Retour:       void
+  ***************************************************************************************************************************************************/
+void Moteur::reglerVitesseMoteur(int pourcentageOC0A, int pourcentageOC0B)
+{
     const uint8_t VALEUR_MAX_TIMER0 = 254;
     const uint8_t DIVISEUR_POURCENTAGE = 100;
     OCR0A = VALEUR_MAX_TIMER0 * pourcentageOC0A / DIVISEUR_POURCENTAGE;

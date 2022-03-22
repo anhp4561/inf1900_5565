@@ -23,19 +23,19 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=ecricremenoire
+PROJECTNAME=test
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= lireByteCode.cpp memoire_24.cpp rs232.cpp
+PRJSRC= lireByteCode.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=
+INC= -I$(lib_dir)
 
 # Libraires a lier (ex: -lmylib)
-LIBS=
+LIBS= -ltest
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
@@ -70,6 +70,8 @@ AVRDUDE=avrdude
 REMOVE=rm -f
 # HEXFORMAT -- format pour les fichiers produient .hex
 HEXFORMAT=ihex
+#pour inclure la librairie situer dans le sous-repertoire lib
+lib_dir = ../lib
 
 
 
@@ -79,8 +81,8 @@ HEXFORMAT=ihex
 CFLAGS=-I. -I/usr/include/simavr  -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
 	-std=c++14 -fpack-struct -fshort-enums             \
 	-funsigned-bitfields -funsigned-char    \
-	-Wall                                        
-
+	-Wall   
+	                                     
 # Flags pour le compilateur en C++
 CXXFLAGS=-fno-exceptions     
 
@@ -130,10 +132,14 @@ OBJDEPS=$(CFILES:.c=.o) \
 #
 all: $(TRG) $(HEXROMTRG)
 
+debug : CFLAGS += -DDEBUG
+debug: $(TRG) $(HEXROMTRG)
+
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
 	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
-	-lm $(LIBS)
+	-L $(lib_dir) -lm $(LIBS)
+
 
 # Production des fichiers object
 # De C a objet

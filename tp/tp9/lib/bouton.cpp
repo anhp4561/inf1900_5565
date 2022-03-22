@@ -14,9 +14,13 @@ date : 13-03-2022
 #include <util/delay.h>
 #include "bouton.h"
 
-/* Methode permet l`utilisation du n'importe quel port du microcontrolleur 
-entrée : pin , boutonPin
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         Bouton
+  * Description:  Methode permet l`utilisation du n'importe quel port du microcontrolleur
+  * entree:       pin , boutonPin
+  * Retour:       bouton
+  ***************************************************************************************************************************************************/
+
 Bouton::Bouton(volatile uint8_t *pin, int boutonPin){
     pin_ = pin;
     boutonPin_ = boutonPin;
@@ -34,8 +38,13 @@ Bouton::Bouton(volatile uint8_t *pin, int boutonPin){
     else if (pin_ == &PIND)
         DDRD &= ~(1 << boutonPin_);
 }
-/* Methode permet de savoir si le bouton est encore pressé
-*/
+
+ /****************************************************************************************************************************************************
+  * Nom :         estBoutonPresseRappel
+  * Description:  Methode permet de savoir si le bouton est encore pressé
+  * entree:       
+  * Retour:       true ou false
+  ***************************************************************************************************************************************************/
 bool Bouton::estBoutonPresseRappel(){
     uint8_t rebond = 30;
     uint8_t masque = (1 << boutonPin_);
@@ -45,8 +54,12 @@ bool Bouton::estBoutonPresseRappel(){
     }
     return false;
 }
-/* Methode permet d'actualiser etat du bouton
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         actualiserEtat
+  * Description:  Methode permet d'actualiser etat du bouton
+  * entree:       
+  * Retour:       void
+  ***************************************************************************************************************************************************/
 void Bouton::actualiserEtat()
 {
     switch (etat_){
@@ -79,8 +92,12 @@ void Bouton::actualiserEtat()
         break;
     }
 }
-/* Methode permet de savoir si le bouton est relacher 
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         estBoutonPresseTirage
+  * Description:  Methode permet de savoir si le bouton est relacher 
+  * entree:       
+  * Retour:       bool
+  ***************************************************************************************************************************************************/
 bool Bouton::estBoutonPresseTirage(){
     return !(estBoutonPresseRappel());
 }

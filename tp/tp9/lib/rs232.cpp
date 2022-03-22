@@ -13,8 +13,12 @@
 #include <util/delay.h>
 #include "rs232.h"
 
-/* methode permmettant l'initialisation de l'UART en utilisant les ressources interne de Atmega
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         initialisationUart
+  * Description:  methode permmettant l'initialisation de l'UART en utilisant les ressources interne de Atmega
+  * entree:       
+  * Retour:       void
+  ***************************************************************************************************************************************************/
 void initialisationUart(){
     // 2400 bauds. Nous vous donnons la valeur des deux
     // premiers registres pour vous éviter des complications.
@@ -27,35 +31,34 @@ void initialisationUart(){
     UCSR0C = (1<<USBS0)|(1 << UCSZ01) | (1 << UCSZ00);
 }
 
-/* methode permmettant la transmission  de l'UART  vers le PC
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         transmissionUart
+  * Description:  methode permmettant la transmission  de l'UART  vers le PC
+  * entree:       donnee
+  * Retour:       void
+  ***************************************************************************************************************************************************/
 void transmissionUart(uint8_t donnee){
     while (!(UCSR0A & (1 << UDRE0)))
         _delay_ms(30);
     UDR0 = donnee;
 }
-
-/* methode permmettant la transmission  d'une chaine de caractére de l'UART  vers le PC
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         transmissionUartString
+  * Description:  methode permmettant la transmission  d'une chaine de caractére de l'UART  vers le PC
+  * entree:       message, taille
+  * Retour:       void
+  ***************************************************************************************************************************************************/
 void transmissionUartString(char message[], uint8_t taille){
     for (uint8_t i = 0; i < taille; i++){
         transmissionUart(message[i]);
     }
 }
-
-
-
-void lectureUart(uint8_t *addressDebut, uint8_t valeurFin){
-    char temp = eeprom_read_byte(addressDebut);
-    uint8_t *address = addressDebut;
-    while (temp != valeurFin){
-        transmissionUart(temp);
-        address++;
-        temp = eeprom_read_byte(address);
-    }
-}
-/* methode permmettant de recevoir une valeur de pc a partir du UART
-*/
+ /****************************************************************************************************************************************************
+  * Nom :         receptionUart
+  * Description:  mmthode permmettant de recevoir une valeur de pc a partir du UART
+  * entree:       void
+  * Retour:       void
+  ***************************************************************************************************************************************************/
 unsigned char receptionUart(void){
     while (!(UCSR0A & (1 << RXC0)))
         ;
