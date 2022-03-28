@@ -38,16 +38,19 @@ const uint8_t DEBUT = 0x01,
               UN_BYTE = 0x01;
 
 
-int main () {
+int main ()
+{
     DDRD = 0xff;
     bool enMarche = false;
     bool dansBoucle = false;
     bool estTermine = false;
+    
     Memoire24CXXX memoire;
     Sonnerie sonnerie;
     Moteur moteurs;
     // Configuration des Leds : 
     Led led1 (&PORTA,0,1);
+    
     uint16_t adresseDebutBoucle = 0x0000;
     uint8_t nombreIteration = -1;
     uint16_t adresseLecture = 0x0000; //initialisation pour écrire à la premère adresse mémoire
@@ -109,7 +112,7 @@ int main () {
                 case AVANCER_MOTEUR:
                     operandeBytecode = operandeBytecode * POURCENTAGE_PWM_MOTEUR / VALEUR_MAX_TIMER0;
                     moteurs.avancerMoteur(operandeBytecode,  operandeBytecode);
-                    adresseLecture += UN_BYTE;
+                    adresseLecture += UN_BYTE;   
                     break;
 
                 case RECULER_MOTEUR:
