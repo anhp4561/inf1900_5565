@@ -10,7 +10,10 @@
 #include "debug.h"
 #include "sonnerie.h"
 
+Moteur moteurs = Moteur();
+
 volatile bool basculeTimer = false;
+volatile bool ecrireMouv = true;
 
 // ISR(TIMER1_COMPA_vect)
 // {
@@ -20,7 +23,23 @@ volatile bool basculeTimer = false;
 //     TIFR1 |= (1 << OCF1A);
 // }
 
+ISR ( INT0_vect ) {
+
+ecrireMouv = false;
+refaireParcours(moteurs);
+
+}
+
+initialiserInterruption()
+{
+    DDRD = 0x00; // PORT D est en mode entrée
+    //initialiser l'interruption du bouton pour refaire les mouvements
+    initInterruption0();
+}
+
 int main() {
+
+initialiserInterruption();
 
 // tester Bouton et Led
 #if false 
@@ -154,7 +173,6 @@ transmissionUartString(mots);
 DDRB = 0xff;
     DDRA = 0x00;
     can converter = can();
-    Moteur moteurs = Moteur();
     initialisationUart();
     uint16_t readingLeft = converter.lecture(PA4);
     uint16_t readingRight = converter.lecture(PA6);
@@ -196,6 +214,10 @@ DDRB = 0xff;
             pourcentageRight = (readingRight8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
 
         moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
+        if (ecrireMouv) 
+        {
+            ecrireEnMemoire(pourcentageLeft, pourcentageRight);
+        }
         char tampon[50];
         int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
         DEBUG_PRINT(tampon,n);
