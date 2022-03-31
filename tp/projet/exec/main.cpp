@@ -26,8 +26,13 @@ volatile bool ecrireMouv = true;
 
 // ISR ( INT0_vect ) {
 
+<<<<<<< HEAD
 // ecrireMouv = false;
 // refaireParcours(moteurs);
+=======
+ecrireMouv = false;
+refaireParcours();
+>>>>>>> e9c567d7ecf14f460ca2e1b35fc0fb91c6cfb319
 
 // }
 
