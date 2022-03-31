@@ -3,6 +3,7 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
+#include <can.h>
 #include "led.h"
 #include "rs232.h"
 #include "bouton.h"
@@ -150,7 +151,7 @@ transmissionUartString(mots);
 
 #endif
 
-#if true
+#if false
 DDRB = 0xff;
     DDRA = 0x00;
     can converter = can();
@@ -200,6 +201,32 @@ DDRB = 0xff;
         int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
         DEBUG_PRINT(tampon,n);
     }
+
+#endif
+
+#if true
+Moteur moteurs = Moteur();
+can converter = can();
+const uint8_t VINGT_CM = 58;
+uint8_t pourcentagePwmGauche = 50;
+uint8_t pourcentagePwmDroite = 50;
+while (true){
+    uint16_t lectureDistance = converter.lecture(PA2);
+    uint8_t lectureDistance8Bit = lectureDistance >> 2;
+    char tampon1[50];
+    int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
+    DEBUG_PRINT(tampon1,n1);
+    if (lectureDistance8Bit > VINGT_CM){
+        pourcentagePwmDroite  = pourcentagePwmDroite + 3;
+    }
+    else if (lectureDistance8Bit < VINGT_CM){
+        pourcentagePwmGauche = pourcentagePwmGauche + 3;
+    }
+    else {
+        pourcentagePwmGauche = pourcentagePwmDroite = 50;
+    }
+    moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+}
 
 #endif
 
