@@ -11,13 +11,15 @@
 #include "debug.h"
 #include <memoire_24.h>
 #include "ecrireMouvements.h"
+#include "moteur.h"
 
 uint16_t adresseEcriture;
 const uint8_t UN_BYTE = 0x01;
+Memoire24CXXX notreMemoire = Memoire24CXXX();
+Moteur moteurs = Moteur();
 
 void initialisationEcriture()
 {
-	Memoire24CXXX notreMemoire = Memoire24CXXX();
 	//initialisation pour écrire à la premère adresse mémoire
 	adresseEcriture = 0x00;
 }
@@ -36,20 +38,20 @@ void ecrireEnMemoire(uint8_t pourcentageLeft, uint8_t pourcentageRight)
 
 	}
 
-void refaireParcours(Moteur moteurs) 
+void refaireParcours() 
 {
 	uint16_t adresseLecture = 0x00;
 	uint8_t pourcentageLeft;
-	utin8_t pourcentageRight;
+	uint8_t pourcentageRight;
 
 	while(adresseLecture < adresseEcriture) 
 	{
-	memoire.lecture(adresseLecture, &pourcentageLeft);
+	notreMemoire.lecture(adresseLecture, &pourcentageLeft);
 	adresseLecture +=UN_BYTE;
-    memoire.lecture(adresseLecture, &pourcentageRight);
+    notreMemoire.lecture(adresseLecture, &pourcentageRight);
 	adresseLecture +=UN_BYTE;
 
-	moteurs.avancer(pourcentageLeft, pourcentageRight);
+	moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
 	}
 }
 

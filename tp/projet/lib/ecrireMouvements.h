@@ -16,6 +16,6 @@ class ecrireEnMemoire {
         //Méthode qui écrit une instruction et une opérande en mémoire
         void ecrireInstruction(uint8_t instruction, uint8_t operande);
         //Méthode qui refait le parcours enregistré en mémoire
-        void refaireParcours(Moteur moteurs);
+        void refaireParcours();
     
 };
