@@ -26,13 +26,8 @@ volatile bool ecrireMouv = true;
 
 // ISR ( INT0_vect ) {
 
-<<<<<<< HEAD
 // ecrireMouv = false;
 // refaireParcours(moteurs);
-=======
-ecrireMouv = false;
-refaireParcours();
->>>>>>> e9c567d7ecf14f460ca2e1b35fc0fb91c6cfb319
 
 // }
 
@@ -175,17 +170,17 @@ transmissionUartString(mots);
 
 #endif
 
-#if false
+#if true
 DDRB = 0xff;
     DDRA = 0x00;
     can converter = can();
     initialisationUart();
     uint16_t readingLeft = converter.lecture(PA4);
     uint16_t readingRight = converter.lecture(PA6);
-    uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
+    uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB 
     uint8_t readingRight8 = readingRight >> 2 ;
     int sommeIntensite = 0;
-    uint8_t nIterations = 100;
+    uint8_t nIterations = 10;
     double nLectures = nIterations * 2.0;
     uint8_t pourcentageLeft = 0;
     uint8_t pourcentageRight = 0;
@@ -231,48 +226,51 @@ DDRB = 0xff;
 
 #endif
 
-#if true
+#if false
 Moteur moteurs = Moteur();
 can converter = can();
 const uint8_t VINGT_CM = 58;
-uint8_t pourcentagePwmGauche = 80;
-uint8_t pourcentagePwmDroite = 100;
+uint8_t pourcentagePwmGauche = 55;
+uint8_t pourcentagePwmDroite = 50;
 while (true){
     uint16_t lectureDistance = converter.lecture(PA2);
     uint8_t lectureDistance8Bit = lectureDistance >> 2;
     char tampon1[100];
     int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
     DEBUG_PRINT(tampon1,n1);
-    // if (lectureDistance8Bit > VINGT_CM){
-    //     pourcentagePwmDroite  = pourcentagePwmDroite + 3;
-    // }
-    // else if (lectureDistance8Bit < VINGT_CM){
-    //     pourcentagePwmGauche = pourcentagePwmGauche + 3;
-    // }
-    // else {
-    //     pourcentagePwmGauche = pourcentagePwmDroite = 100;
-    // }
-
-
-    if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
-        moteurs.tournerGaucheMoteur(80);
-        _delay_ms(200);
-        moteurs.avancerMoteur(80,100);
-        _delay_ms(200);
-        moteurs.tournerDroiteMoteur(100);
-        _delay_ms(200);
-        moteurs.arreterMoteur();
+    if (lectureDistance8Bit > VINGT_CM+5){
+        pourcentagePwmGauche = 0;
+        if (pourcentagePwmDroite < 98)
+            pourcentagePwmDroite += 3;
+        
     }
-    else if (lectureDistance8Bit < VINGT_CM - 3) {
-        moteurs.tournerDroiteMoteur(100);
-        _delay_ms(100);
-        moteurs.avancerMoteur(90,80);
-        _delay_ms(100);
-        moteurs.tournerGaucheMoteur(80);
-        _delay_ms(100);
-        moteurs.arreterMoteur();
+    else if (lectureDistance8Bit < VINGT_CM-5){
+        pourcentagePwmDroite = 0;
+        if (pourcentagePwmGauche < 98)
+            pourcentagePwmGauche += 3;
+    }
+    else {
+        pourcentagePwmGauche = 55;
+        pourcentagePwmDroite = 55;
     }
     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+    // if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
+    //     moteurs.tournerGaucheMoteur(80);
+    //     _delay_ms(600);
+    //     moteurs.tournerDroiteMoteur(90);
+    //     _delay_ms(700);
+    //     moteurs.arreterMoteur();
+    // }
+    
+    // else if (lectureDistance8Bit < VINGT_CM - 3) {
+    //     moteurs.tournerDroiteMoteur(80);
+    //     _delay_ms(700);
+    //     moteurs.tournerGaucheMoteur(80);
+    //     _delay_ms(600);
+    //     moteurs.arreterMoteur();
+    // }
+    // else // dans l'intervalle
+    //     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
 }
 
 #endif
