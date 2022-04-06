@@ -275,4 +275,18 @@ while (true){
 
 #endif
 
+#if false
+DDRA = 0x00;
+DDRB = 0xff;
+while (true) {
+    if (PINA & (1<< PA0))
+        PORTB = 1;
+    else    
+        PORTB = 0;
+    char tampon1[100];
+    int n1 = sprintf(tampon1,"Valeur de PINA :  %d  \n", PINA);
+    DEBUG_PRINT(tampon1,n1);
+}
+#endif
+
 }
