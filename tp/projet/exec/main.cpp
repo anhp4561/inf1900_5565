@@ -3,6 +3,7 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
+#include <can.h>
 #include "led.h"
 #include "rs232.h"
 #include "bouton.h"
