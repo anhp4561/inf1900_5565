@@ -42,17 +42,44 @@ void transmissionUART ( uint8_t donnee ) {
 }
 
 int main () {
-    /
     DDRD = 1;
     initialisationUART();
-    uint8_t tableau[] = {'H','E','L','L','O',' ', 'W','O','R','L','D','!', ' '};
-    uint8_t retour[sizeof(tableau)] = {};
-    Memoire24CXXX memoire = Memoire24CXXX();
-    memoire.ecriture(address, tableau, sizeof(tableau));
-    //uint8_t* capture;
-    memoire.lecture(address, retour, sizeof(retour));
-    for (uint8_t valeur : tableau){
-        transmissionUART(valeur);
+    // uint8_t tableau[] = {'H','E','L','L','O',' ', 'W','O','R','L','D','!', ' '};
+    // uint8_t retour[sizeof(tableau)] = {};
+    // Memoire24CXXX memoire = Memoire24CXXX();
+    // memoire.ecriture(address, tableau, sizeof(tableau));
+    // //uint8_t* capture;
+    // memoire.lecture(address, retour, sizeof(retour));
+    // for (uint8_t valeur : tableau){
+    //     transmissionUART(valeur);
+    //}
+    uint16_t address = 0x0000;
+    Memoire24CXXX memoire;
+    uint8_t donnee1 = 0x12;
+    uint8_t donnee2 = 0x34;
+    uint8_t donnee3 = 0x56;
+    uint8_t donnee4 = 0x78;
+    uint8_t donnee5 = 0x90;
+    uint8_t donneeLecture;
+
+    // memoire.ecriture(address,donnee1);
+    // _delay_ms(5);
+    // address += 0x01;
+    // memoire.ecriture(address,donnee2);
+    // _delay_ms(5);
+    // address += 0x01;
+    // memoire.ecriture(address,donnee3);
+    // _delay_ms(5);
+    // address += 0x01;
+    // memoire.ecriture(address,donnee4);
+    // _delay_ms(5);
+    // address += 0x01;
+    // memoire.ecriture(address,donnee5);
+
+    _delay_ms(5);
+    for(int i = 0; i < 18; i++) {
+    memoire.lecture(i, &donneeLecture);
+    transmissionUART(donneeLecture);
     }
 }
 

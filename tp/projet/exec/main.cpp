@@ -11,7 +11,10 @@
 #include "debug.h"
 #include "sonnerie.h"
 
+Moteur moteurs = Moteur();
+
 volatile bool basculeTimer = false;
+volatile bool ecrireMouv = true;
 
 // ISR(TIMER1_COMPA_vect)
 // {
@@ -21,7 +24,23 @@ volatile bool basculeTimer = false;
 //     TIFR1 |= (1 << OCF1A);
 // }
 
+// ISR ( INT0_vect ) {
+
+// ecrireMouv = false;
+// refaireParcours(moteurs);
+
+// }
+
+// void initialiserInterruption()
+// {
+//     DDRD = 0x00; // PORT D est en mode entrée
+//     //initialiser l'interruption du bouton pour refaire les mouvements
+//     initInterruption0();
+// }
+
 int main() {
+
+//initialiserInterruption();
 
 // tester Bouton et Led
 #if false 
@@ -40,7 +59,7 @@ int main() {
 
 // Tester RS232 
 #if false  
-initialisationUart();
+//initialisationUart();
 char mots[] = "Le robot en INF1900\n";
 transmissionUartString(mots);
 #endif
@@ -52,7 +71,7 @@ transmissionUartString(mots);
     int pourcentageOC0A = 100;
     int pourcentageOC0B = 100;
     while (true){
-        char tampon[50];
+        char tampon[100];
         int n = sprintf(tampon,"La valeur de pourcentage0C0B est : %d\n", pourcentageOC0B);
         moteurs.avancerMoteur(pourcentageOC0A, pourcentageOC0B);
         _delay_ms(2000);
@@ -88,7 +107,7 @@ transmissionUartString(mots);
     // _delay_ms(1000);
     // sonnerie.jouerSonnerie(55);
     // _delay_ms(1000);
-    // moteurs.avancerMoteur(50,50);
+    // moteurs.avancerMoteur(100,100);
     // _delay_ms(10000);
 
     // theme de tetris
@@ -132,11 +151,11 @@ transmissionUartString(mots);
     _delay_ms(75);
     sonnerie.jouerSonnerie(69);
     _delay_ms(250);
-    // moteurs.avancerMoteur(50,50);
+    // moteurs.avancerMoteur(100,100);
     // _delay_ms(2500);
     // moteurs.avancerMoteur(100,100);
     // _delay_ms(2500);
-    // moteurs.reculerMoteur(50,50);
+    // moteurs.reculerMoteur(100,100);
     // _delay_ms(2500);
     // moteurs.reculerMoteur(100,100);
     // _delay_ms(2500);
@@ -155,11 +174,10 @@ transmissionUartString(mots);
 DDRB = 0xff;
     DDRA = 0x00;
     can converter = can();
-    Moteur moteurs = Moteur();
     initialisationUart();
     uint16_t readingLeft = converter.lecture(PA4);
     uint16_t readingRight = converter.lecture(PA6);
-    uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
+    uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB 
     uint8_t readingRight8 = readingRight >> 2 ;
     int sommeIntensite = 0;
     uint8_t nIterations = 10;
@@ -172,13 +190,13 @@ DDRB = 0xff;
         readingRight = converter.lecture(PA6);
         readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
         readingRight8 = readingRight >> 2 ;
-        char tampon2[50];
+        char tampon2[100];
         int n2= sprintf(tampon2,"readingLeft : %d     readingRight : %d\n\n", readingLeft8, readingRight8);
         DEBUG_PRINT(tampon2,n2);
         sommeIntensite += readingLeft8 +readingRight8;
     }
     uint8_t intensiteLumiere = sommeIntensite / nLectures; 
-    char tampon1[50];
+    char tampon1[100];
     int n1 = sprintf(tampon1,"Intesite lumiere est %d\n", intensiteLumiere);
     DEBUG_PRINT(tampon1,n1);
     while (true){
@@ -197,12 +215,64 @@ DDRB = 0xff;
             pourcentageRight = (readingRight8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
 
         moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-        char tampon[50];
+        // if (ecrireMouv) 
+        // {
+        //     ecrireEnMemoire(pourcentageLeft, pourcentageRight);
+        // }
+        char tampon[100];
         int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
         DEBUG_PRINT(tampon,n);
     }
 
 #endif
 
+#if false
+Moteur moteurs = Moteur();
+can converter = can();
+const uint8_t VINGT_CM = 58;
+uint8_t pourcentagePwmGauche = 55;
+uint8_t pourcentagePwmDroite = 50;
+while (true){
+    uint16_t lectureDistance = converter.lecture(PA2);
+    uint8_t lectureDistance8Bit = lectureDistance >> 2;
+    char tampon1[100];
+    int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
+    DEBUG_PRINT(tampon1,n1);
+    if (lectureDistance8Bit > VINGT_CM+5){
+        pourcentagePwmGauche = 0;
+        if (pourcentagePwmDroite < 98)
+            pourcentagePwmDroite += 3;
+        
+    }
+    else if (lectureDistance8Bit < VINGT_CM-5){
+        pourcentagePwmDroite = 0;
+        if (pourcentagePwmGauche < 98)
+            pourcentagePwmGauche += 3;
+    }
+    else {
+        pourcentagePwmGauche = 55;
+        pourcentagePwmDroite = 55;
+    }
+    moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+    // if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
+    //     moteurs.tournerGaucheMoteur(80);
+    //     _delay_ms(600);
+    //     moteurs.tournerDroiteMoteur(90);
+    //     _delay_ms(700);
+    //     moteurs.arreterMoteur();
+    // }
+    
+    // else if (lectureDistance8Bit < VINGT_CM - 3) {
+    //     moteurs.tournerDroiteMoteur(80);
+    //     _delay_ms(700);
+    //     moteurs.tournerGaucheMoteur(80);
+    //     _delay_ms(600);
+    //     moteurs.arreterMoteur();
+    // }
+    // else // dans l'intervalle
+    //     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
 }
 
+#endif
+
+}
