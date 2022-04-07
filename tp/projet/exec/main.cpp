@@ -7,14 +7,18 @@
 #include "led.h"
 #include "rs232.h"
 #include "bouton.h"
-#include "moteur.h"
 #include "debug.h"
+#include <memoire_24.h>
 #include "sonnerie.h"
+#include "interruptions.h"
+#include "ecrireMouvements.h"
 
 Moteur moteurs = Moteur();
 
 volatile bool basculeTimer = false;
 volatile bool ecrireMouv = true;
+
+Led led (&PORTA,0,1);
 
 // ISR(TIMER1_COMPA_vect)
 // {
@@ -27,11 +31,11 @@ volatile bool ecrireMouv = true;
 ISR ( INT0_vect ) {
 
 ecrireMouv = false;
-refaireParcours();
+
 
 }
 
-initialiserInterruption()
+void initInterr()
 {
     DDRD = 0x00; // PORT D est en mode entrée
     //initialiser l'interruption du bouton pour refaire les mouvements
@@ -40,7 +44,7 @@ initialiserInterruption()
 
 int main() {
 
-initialiserInterruption();
+initInterr();
 
 // tester Bouton et Led
 #if false 
@@ -67,7 +71,6 @@ transmissionUartString(mots);
 //tester PWM et Debug
 #if false
     initialisationUart();
-    Moteur moteurs;
     int pourcentageOC0A = 100;
     int pourcentageOC0B = 100;
     while (true){
@@ -226,8 +229,7 @@ DDRB = 0xff;
 
 #endif
 
-#if true
-Moteur moteurs = Moteur();
+#if false
 can converter = can();
 const uint8_t VINGT_CM = 58;
 uint8_t pourcentagePwmGauche = 50;
@@ -249,6 +251,39 @@ while (true){
     }
     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
 }
+
+#endif
+
+#if false
+
+DDRA = 0x00;
+PORTA = 0x01;
+uint8_t g = 255;
+uint8_t d = 255;
+initialisationEcriture();
+for (int i=0; i < 20; i++) {
+    if (ecrireMouv) {
+moteurs.avancerMoteur(g, d);
+    ecrireEnMemoire(g, d);
+    _delay_ms(100);
+}
+
+}
+
+moteurs.arreterMoteur();
+_delay_ms(1000);
+uint8_t adresseLecture = 0x00;
+uint8_t adresseEcriture = getAdresseEcriture();
+while(adresseLecture < adresseEcriture) 
+	{
+    g = getMemoire(adresseLecture);
+    adresseLecture += 0x01;
+    d = getMemoire(adresseLecture);
+    adresseLecture += 0x01;
+    moteurs.avancerMoteur(g, d);
+    _delay_ms(100);
+    }
+moteurs.arreterMoteur();
 
 #endif
 
