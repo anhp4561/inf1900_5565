@@ -172,57 +172,57 @@ transmissionUartString(mots);
 
 #if true
 DDRB = 0xff;
-    DDRA = 0x00;
-    can converter = can();
-    initialisationUart();
-    uint16_t readingLeft = converter.lecture(PA4);
-    uint16_t readingRight = converter.lecture(PA6);
-    uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB 
-    uint8_t readingRight8 = readingRight >> 2 ;
-    int sommeIntensite = 0;
-    uint8_t nIterations = 10;
-    double nLectures = nIterations * 2.0;
-    uint8_t pourcentageLeft = 0;
-    uint8_t pourcentageRight = 0;
+DDRA = 0x00;
+can converter = can();
+initialisationUart();
+uint16_t readingLeft = converter.lecture(PA4);
+uint16_t readingRight = converter.lecture(PA6);
+uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB 
+uint8_t readingRight8 = readingRight >> 2 ;
+int sommeIntensite = 0;
+uint8_t nIterations = 10;
+double nLectures = nIterations * 2.0;
+uint8_t pourcentageLeft = 0;
+uint8_t pourcentageRight = 0;
 
-    for (int i = 0; i < nIterations ; i++){
-        readingLeft = converter.lecture(PA4);
-        readingRight = converter.lecture(PA6);
-        readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
-        readingRight8 = readingRight >> 2 ;
-        char tampon2[100];
-        int n2= sprintf(tampon2,"readingLeft : %d     readingRight : %d\n\n", readingLeft8, readingRight8);
-        DEBUG_PRINT(tampon2,n2);
-        sommeIntensite += readingLeft8 +readingRight8;
-    }
-    uint8_t intensiteLumiere = sommeIntensite / nLectures; 
-    char tampon1[100];
-    int n1 = sprintf(tampon1,"Intesite lumiere est %d\n", intensiteLumiere);
-    DEBUG_PRINT(tampon1,n1);
-    while (true){
-        readingLeft = converter.lecture(PA4);
-        readingRight = converter.lecture(PA6);
-        readingLeft8 = (readingLeft >> 2) ; // takes out the 2 LSB
-        readingRight8 = (readingRight >> 2) ;
-        if (readingLeft8 <= intensiteLumiere)
-            pourcentageLeft = 0;
-        else 
-            pourcentageLeft  = (readingLeft8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
-        
-        if (readingRight8 <= intensiteLumiere)
-            pourcentageRight = 0;
-        else
-            pourcentageRight = (readingRight8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
+for (int i = 0; i < nIterations ; i++){
+    readingLeft = converter.lecture(PA4);
+    readingRight = converter.lecture(PA6);
+    readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
+    readingRight8 = readingRight >> 2 ;
+    char tampon2[100];
+    int n2= sprintf(tampon2,"readingLeft : %d     readingRight : %d\n\n", readingLeft8, readingRight8);
+    DEBUG_PRINT(tampon2,n2);
+    sommeIntensite += readingLeft8 +readingRight8;
+}
+uint8_t intensiteLumiere = sommeIntensite / nLectures; 
+char tampon1[100];
+int n1 = sprintf(tampon1,"Intesite lumiere est %d\n", intensiteLumiere);
+DEBUG_PRINT(tampon1,n1);
+while (true){
+    readingLeft = converter.lecture(PA4);
+    readingRight = converter.lecture(PA6);
+    readingLeft8 = (readingLeft >> 2) ; // takes out the 2 LSB
+    readingRight8 = (readingRight >> 2) ;
+    if (readingLeft8 <= intensiteLumiere)
+        pourcentageLeft = 0;
+    else 
+        pourcentageLeft  = (readingLeft8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
+    
+    if (readingRight8 <= intensiteLumiere)
+        pourcentageRight = 0;
+    else
+        pourcentageRight = (readingRight8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
 
-        moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-        // if (ecrireMouv) 
-        // {
-        //     ecrireEnMemoire(pourcentageLeft, pourcentageRight);
-        // }
-        char tampon[100];
-        int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
-        DEBUG_PRINT(tampon,n);
-    }
+    moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
+    // if (ecrireMouv) 
+    // {
+    //     ecrireEnMemoire(pourcentageLeft, pourcentageRight);
+    // }
+    char tampon[100];
+    int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
+    DEBUG_PRINT(tampon,n);
+}
 
 #endif
 
@@ -240,14 +240,9 @@ while (true){
     DEBUG_PRINT(tampon1,n1);
     if (lectureDistance8Bit > VINGT_CM+5){
         pourcentagePwmGauche = 0;
-        if (pourcentagePwmDroite < 98)
-            pourcentagePwmDroite += 3;
-        
     }
     else if (lectureDistance8Bit < VINGT_CM-5){
         pourcentagePwmDroite = 0;
-        if (pourcentagePwmGauche < 98)
-            pourcentagePwmGauche += 3;
     }
     else {
         pourcentagePwmGauche = 55;
@@ -276,10 +271,10 @@ while (true){
 #endif
 
 #if false
-DDRA = 0x00;
 DDRB = 0xff;
+Bouton bouton = Bouton (&PINA, 0);
 while (true) {
-    if (PINA & (1<< PA0))
+    if (bouton.estBoutonPresseTirage())
         PORTB = 1;
     else    
         PORTB = 0;
