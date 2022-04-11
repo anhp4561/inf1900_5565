@@ -230,16 +230,25 @@ while (true){
 #endif
 
 #if true
+<<<<<<< HEAD
 can converter = can();
 const uint8_t VINGT_CM = 58;
 uint8_t pourcentagePwmGauche = 53;
 uint8_t pourcentagePwmDroite = 50;
+=======
+Moteur moteurs = Moteur();
+can converter = can();
+const uint8_t VINGT_CM = 58;
+uint8_t pourcentagePwmGauche = 55;
+uint8_t pourcentagePwmDroite = 53;
+>>>>>>> d4bb6d936c5dcfb3a2431943ab7809e830daab14
 while (true){
     uint16_t lectureDistance = converter.lecture(PA2);
     uint8_t lectureDistance8Bit = lectureDistance >> 2;
     char tampon1[100];
     int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
     DEBUG_PRINT(tampon1,n1);
+<<<<<<< HEAD
     if (lectureDistance8Bit > VINGT_CM+3){
         pourcentagePwmGauche = 0;
     }
@@ -249,6 +258,17 @@ while (true){
     else {
         pourcentagePwmGauche = 53;
         pourcentagePwmDroite = 50;
+=======
+    if (lectureDistance8Bit > (VINGT_CM+3)){
+        pourcentagePwmGauche = 0;
+    }
+    else if (lectureDistance8Bit < (VINGT_CM-3)){
+        pourcentagePwmDroite = 0;
+    }
+    else {
+        pourcentagePwmGauche = 55;
+        pourcentagePwmDroite = 53;
+>>>>>>> d4bb6d936c5dcfb3a2431943ab7809e830daab14
     }
     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
     // if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
@@ -316,7 +336,7 @@ while (true) {
     char tampon1[100];
     int n1 = sprintf(tampon1,"Valeur de PINA :  %d  \n", PINA);
     DEBUG_PRINT(tampon1,n1);
-}
+ }
 #endif
 
 }
