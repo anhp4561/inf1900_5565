@@ -8,14 +8,17 @@
  * Description : Classe qui enregistre les instructions du robot en mémoire
  */
 
-class ecrireEnMemoire {
-    public:
+#include "moteur.h"
 
-        //Méthode qui initialise l'écriture des données en mémoire
-        void initialisationEcriture( void );
-        //Méthode qui écrit une instruction et une opérande en mémoire
-        void ecrireInstruction(uint8_t instruction, uint8_t operande);
-        //Méthode qui refait le parcours enregistré en mémoire
-        void refaireParcours();
+//Méthode qui initialise l'écriture des données en mémoire
+void initialisationEcriture();
+//Méthode qui écrit une instruction et une opérande en mémoire
+void ecrireEnMemoire(uint8_t pourcentageLeft, uint8_t pourcentageRight);
+//Méthode qui refait le parcours enregistré en mémoire
+void refaireParcours(Moteur moteurs, uint8_t adresseL);
+//méthode qui donne l'adresse finale ou nous avons écrit en mémoire
+uint8_t getAdresseEcriture();
+//méthode qui retourne une donnée en mémoire
+uint8_t getMemoire(uint16_t adresseL);
     
-};
+
