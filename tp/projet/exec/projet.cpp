@@ -16,16 +16,17 @@ void suivreLumiere(int intensiteLampe);
 bool estPresseD2(); // Classe Bouton ne marche pas avec Port D
 uint8_t lectureCan(uint8_t pin);
 void faireDemiTour();
+void allumerLed5hz3secondes (char couleur);
 
-const uint8_t N_ITERATIONS = 10;
+const uint8_t N_ITERATIONS = 20;
 const double N_LECTURES = N_ITERATIONS * 2.0;
 const uint8_t VINGT_CM = 58;
-const uint8_t INTERVALLE_VINGT_CM = 2;
+const uint8_t INTERVALLE_VINGT_CM = 2; // marge d'erreur pour 20 cm
 const uint8_t PWM_MAXIMAL = 98;
 const uint8_t DELAI_BOUTON = 30;
 const uint8_t PWN_MAXIMAL = 255;
 const uint8_t POURCENTAGE = 100;
-const uint16_t DELAI_DEMI_TOUR = 5500;
+const uint16_t DELAI_DEMI_TOUR = 5600;
 
 enum class Etat {
     INIT,
@@ -41,9 +42,9 @@ Etat etatPresent = Etat::INIT;
 int main () {
     initialisationUart();
     can can;
+    Led led(&PORTB, 0, 1);
     Bouton boutonBlanc (&PINA,0);
     DDRA &= ~((1 << PA4) | (1 << PA6) | (1 << PA1));
-    Led led(&PORTB, 0, 1);
     int sommeIntensite = 0;
     uint8_t lecturePhotoresistanceGauche = 0; 
     uint8_t lecturePhotoresistanceDroite = 0;
@@ -54,18 +55,16 @@ int main () {
         lecturePhotoresistanceDroite = lectureCan(PA6);
         sommeIntensite += lecturePhotoresistanceGauche +lecturePhotoresistanceDroite;
     }
-    uint8_t intensiteLumiere = sommeIntensite / N_LECTURES; 
+    uint8_t intensiteLumiere = (sommeIntensite / N_LECTURES) + 10; // + 10 pour que ca soit plus restrictive
+
+    if (intensiteLumiere > 150)
+        intensiteLumiere = 150;
 
     while (true){
         switch (etatPresent){
             case Etat::INIT:
                 if (estPresseD2()){
-                    for (int i = 0; i < 15; i++){ // 15 pour que LED clignote pour 3 secondes
-                    led.allumerVertLed();
-                    _delay_ms(100);
-                    led.eteindreLed();
-                    _delay_ms(100);
-                    }
+                    allumerLed5hz3secondes('v');
                     etatPresent = Etat::MODE_SUIVEUR_MUR;
                 }
                 break;
@@ -129,8 +128,8 @@ uint8_t lectureCan(uint8_t pin){
 void suivreMur() {
     can can;
     Moteur moteurs = Moteur();
-    uint8_t pourcentagePwmGauche = 51;
-    uint8_t pourcentagePwmDroite = 50;
+    uint8_t pourcentagePwmGauche = 58;
+    uint8_t pourcentagePwmDroite = 57;
     uint8_t lectureDistance = lectureCan(PA1);
     while (lectureDistance > 20) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
         if (lectureDistance > VINGT_CM + INTERVALLE_VINGT_CM){
@@ -140,8 +139,8 @@ void suivreMur() {
             pourcentagePwmDroite = 0;
         }
         else {
-            pourcentagePwmGauche = 51;
-            pourcentagePwmDroite = 50;
+            pourcentagePwmGauche = 58;
+            pourcentagePwmDroite = 57;
         }
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
         lectureDistance = lectureCan(PA1);
@@ -164,7 +163,7 @@ void suivreLumiere (int intensiteLampe) {
     uint8_t lecturePhotoresistanceDroite = 0;
     uint8_t lectureDistance = lectureCan(PA1);
 
-    while (lectureDistance <= 50 | lectureDistance > 63) { // 30 est une valeur arbitraire (sert a voir si on est pres d'un mur)
+    while (lectureDistance <= 50 | lectureDistance > 63) { // 63 pour une distancce de 15cm et 50 pour une distance de 25 cm.
         lecturePhotoresistanceGauche = lectureCan(PA4);
         lecturePhotoresistanceDroite = lectureCan(PA6);
         if (lecturePhotoresistanceGauche <= intensiteLampe)
@@ -193,4 +192,24 @@ void faireDemiTour () {
     _delay_ms(DELAI_DEMI_TOUR);
     pourcentagePwmGauche = 0;
     pourcentagePwmDroite = 0;
+}
+
+void allumerLed5hz3secondes (char couleur) {
+    Led led(&PORTB, 0, 1);
+    if (couleur == 'v'){
+        for (int i = 0; i < 15; i++){ // 15 pour que LED clignote pour 3 secondes
+            led.allumerVertLed();
+            _delay_ms(100);
+            led.eteindreLed();
+            _delay_ms(100);
+        } 
+    }
+    else if (couleur == 'r'){
+       for (int i = 0; i < 15; i++){ // 15 pour que LED clignote pour 3 secondes
+            led.allumerRougeLed();
+            _delay_ms(100);
+            led.eteindreLed();
+            _delay_ms(100);
+        } 
+    }             
 }
