@@ -173,7 +173,7 @@ transmissionUartString(mots);
 
 #endif
 
-#if true
+#if false
 DDRB = 0xff;
 DDRA = 0x00;
 can converter = can();
@@ -229,10 +229,10 @@ while (true){
 
 #endif
 
-#if false
+#if true
 can converter = can();
 const uint8_t VINGT_CM = 58;
-uint8_t pourcentagePwmGauche = 55;
+uint8_t pourcentagePwmGauche = 53;
 uint8_t pourcentagePwmDroite = 50;
 while (true){
     uint16_t lectureDistance = converter.lecture(PA2);
@@ -240,15 +240,15 @@ while (true){
     char tampon1[100];
     int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
     DEBUG_PRINT(tampon1,n1);
-    if (lectureDistance8Bit > VINGT_CM+5){
+    if (lectureDistance8Bit > VINGT_CM+3){
         pourcentagePwmGauche = 0;
     }
-    else if (lectureDistance8Bit < VINGT_CM-5){
+    else if (lectureDistance8Bit < VINGT_CM-3){
         pourcentagePwmDroite = 0;
     }
     else {
-        pourcentagePwmGauche = 55;
-        pourcentagePwmDroite = 55;
+        pourcentagePwmGauche = 53;
+        pourcentagePwmDroite = 50;
     }
     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
     // if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
