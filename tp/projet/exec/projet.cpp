@@ -13,141 +13,184 @@
 
 void suivreMur();
 void suivreLumiere(int intensiteLampe);
+bool estPresseD2(); // Classe Bouton ne marche pas avec Port D
+uint8_t lectureCan(uint8_t pin);
+void faireDemiTour();
 
 const uint8_t N_ITERATIONS = 10;
 const double N_LECTURES = N_ITERATIONS * 2.0;
 const uint8_t VINGT_CM = 58;
-const uint8_t INTERVALLE_VINGT_CM = 3;
+const uint8_t INTERVALLE_VINGT_CM = 2;
 const uint8_t PWM_MAXIMAL = 98;
+const uint8_t DELAI_BOUTON = 30;
+const uint8_t PWN_MAXIMAL = 255;
+const uint8_t POURCENTAGE = 100;
+const uint16_t DELAI_DEMI_TOUR = 5500;
+
+enum class Etat {
+    INIT,
+    MODE_SUIVEUR_MUR,
+    MODE_SUIVEUR_LUMIERE,
+    ATTENTE,
+    MODE_TOURNER,
+    FIN_PARCOURS
+};
+
+Etat etatPresent = Etat::INIT;
 
 int main () {
     initialisationUart();
     can can;
-    Bouton bouton = Bouton (&PINA, 0); // estBoutonPresseRappel();
-    DDRA &= ~((1 << PA4) | (1 << PA6) | (1 << PA2));
+    Bouton boutonBlanc (&PINA,0);
+    DDRA &= ~((1 << PA4) | (1 << PA6) | (1 << PA1));
+    Led led(&PORTB, 0, 1);
     int sommeIntensite = 0;
-    uint16_t readingLeft;
-    uint16_t readingRight;
-    uint8_t readingLeft8; 
-    uint8_t readingRight8;
-    bool sortirLoop = false;
+    uint8_t lecturePhotoresistanceGauche = 0; 
+    uint8_t lecturePhotoresistanceDroite = 0;
+
 
     for (int i = 0; i < N_ITERATIONS ; i++) {
-        readingLeft = can.lecture(PA4);
-        readingRight = can.lecture(PA6);
-        readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
-        readingRight8 = readingRight >> 2 ;
-        sommeIntensite += readingLeft8 +readingRight8;
+        lecturePhotoresistanceGauche = lectureCan(PA4);
+        lecturePhotoresistanceDroite = lectureCan(PA6);
+        sommeIntensite += lecturePhotoresistanceGauche +lecturePhotoresistanceDroite;
     }
     uint8_t intensiteLumiere = sommeIntensite / N_LECTURES; 
-    
-    while (true){
-        char tampon2[50];
-        // int n2= sprintf(tampon2,"readingLeft : %d     readingRight : %d\n\n", readingLeft8, readingRight8);
-        int n2 = sprintf (tampon2, "in main\n");
-        DEBUG_PRINT(tampon2,n2);
-        suivreMur();
-        char tampon8[50];
-        int n8 = sprintf (tampon8, "retour dans le main\n");
-        DEBUG_PRINT(tampon8, n8);
-        readingLeft = can.lecture(PA4);
-        readingRight = can.lecture(PA6);
-        readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
-        readingRight8 = readingRight >> 2 ;
-        char tampon6[100];
-        int n6 = sprintf (tampon6, "juste avant loop\n");
-        //int n6 = sprintf(tampon6,"rLeft %d, rRight %d, intesite %d et bouton %d\n", readingLeft8, readingRight8, intensiteLumiere, bouton.estBoutonPresseTirage());
-        DEBUG_PRINT(tampon6,n6);
-        while (readingLeft8 < intensiteLumiere | readingRight8 | intensiteLumiere | !(bouton.estBoutonPresseTirage())){
-            readingLeft = can.lecture(PA4);
-            readingRight = can.lecture(PA6);
-            readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB
-            readingRight8 = readingRight >> 2 ;
-            if (bouton.estBoutonPresseTirage())
-                sortirLoop = true;
-            char tampon5[50];
-            int n5 = sprintf(tampon5,"rLeft %d, rRight %d, intesite %d et bouton %d\n", readingLeft8, readingRight8, intensiteLumiere, bouton.estBoutonPresseTirage());
-            DEBUG_PRINT(tampon5,n5);
-        }
-        if (sortirLoop) {
-            sortirLoop = false;
-            break;
-        }
-        suivreLumiere(intensiteLumiere);
-    }
-} 
 
-// faire une fonction pour lire, puis convertir
+    while (true){
+        switch (etatPresent){
+            case Etat::INIT:
+                if (estPresseD2()){
+                    for (int i = 0; i < 15; i++){ // 15 pour que LED clignote pour 3 secondes
+                    led.allumerVertLed();
+                    _delay_ms(100);
+                    led.eteindreLed();
+                    _delay_ms(100);
+                    }
+                    etatPresent = Etat::MODE_SUIVEUR_MUR;
+                }
+                break;
+
+            case Etat::MODE_SUIVEUR_MUR:
+                suivreMur();
+                etatPresent = Etat::ATTENTE;
+                break;
+
+            case Etat::MODE_SUIVEUR_LUMIERE:
+                suivreLumiere(intensiteLumiere);
+                etatPresent = Etat::MODE_SUIVEUR_MUR;
+                break;
+
+            case Etat::ATTENTE: {
+                uint8_t lectureDistance = lectureCan(PA1);
+                uint8_t lecturePhotoresistanceGauche = lectureCan(PA4);
+                uint8_t lecturePhotoresistanceDroite = lectureCan(PA6);
+
+                // if (lectureDistance > 20 & lectureDistance < 80)
+                //     etatPresent = Etat::MODE_SUIVEUR_MUR;
+
+                if (lecturePhotoresistanceGauche > (intensiteLumiere + 30) | lecturePhotoresistanceDroite > (intensiteLumiere + 30))
+                    etatPresent = Etat::MODE_SUIVEUR_LUMIERE;
+
+                else if (estPresseD2())
+                    etatPresent = Etat::FIN_PARCOURS;
+
+                else if (boutonBlanc.estBoutonPresseTirage())
+                    etatPresent = Etat::MODE_TOURNER;
+                break;
+                }
+
+            case Etat::MODE_TOURNER:
+                led.allumerVertLed();
+                faireDemiTour();
+                led.eteindreLed();
+                etatPresent = Etat::MODE_SUIVEUR_MUR;
+                break;
+
+            case Etat::FIN_PARCOURS:
+                led.allumerRougeLed();
+                break;
+        }
+    }
+}
+
+bool estPresseD2 (){
+    uint8_t d2BoutonLecture1 = PIND;
+    _delay_ms(DELAI_BOUTON);
+    uint8_t d2BoutonLecture2 = PIND;
+    return ((d2BoutonLecture1 & (1<<PD2)) && d2BoutonLecture1 == d2BoutonLecture2);
+}
+
+uint8_t lectureCan(uint8_t pin){
+    can can;
+    uint16_t lectureCan16Bit = can.lecture(pin);
+    return lectureCan16Bit >> 2;
+}
 
 void suivreMur() {
-    char tampon1[50];
-    // int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
-    int n1 = sprintf (tampon1, "in suivreMur\n");
-    DEBUG_PRINT(tampon1,n1);
     can can;
     Moteur moteurs = Moteur();
-    uint8_t pourcentagePwmGauche = 55;
+    uint8_t pourcentagePwmGauche = 51;
     uint8_t pourcentagePwmDroite = 50;
-    uint16_t lectureDistance = can.lecture(PA2);
-    uint8_t lectureDistance8Bit = lectureDistance >> 2;
-    while (lectureDistance8Bit > 20) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
-        if (lectureDistance8Bit > VINGT_CM + INTERVALLE_VINGT_CM){
+    uint8_t lectureDistance = lectureCan(PA1);
+    while (lectureDistance > 20) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
+        if (lectureDistance > VINGT_CM + INTERVALLE_VINGT_CM){
             pourcentagePwmGauche = 0; 
         }
-        else if (lectureDistance8Bit < VINGT_CM - INTERVALLE_VINGT_CM){
+        else if (lectureDistance < VINGT_CM - INTERVALLE_VINGT_CM){
             pourcentagePwmDroite = 0;
         }
         else {
-            pourcentagePwmGauche = 55;
+            pourcentagePwmGauche = 51;
             pourcentagePwmDroite = 50;
         }
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
-        lectureDistance = can.lecture(PA2);
-        lectureDistance8Bit = lectureDistance >> 2;
+        lectureDistance = lectureCan(PA1);
         char tampon4[50];
-        int n4 = sprintf(tampon4,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
+        int n4 = sprintf(tampon4,"La distance sur 255 est :  %d  \n", lectureDistance);
         DEBUG_PRINT(tampon4,n4);
     }
-    char tampon7[50];
-    int n7 = sprintf(tampon7,"fin loop de suivreMur\n");
-    DEBUG_PRINT(tampon7, n7);
-
 }
 
 void suivreLumiere (int intensiteLampe) {
     char tampon[50];
-    // int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
+    // int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentagePwmGauche, pourcentagePwmDroite);
     int n  = sprintf (tampon, "in suivreLumiere\n");
     DEBUG_PRINT(tampon,n);
     can can;
     Moteur moteurs = Moteur();
-    uint8_t pourcentageLeft = 0;
-    uint8_t pourcentageRight = 0;
-    uint16_t readingLeft;
-    uint16_t readingRight;
-    uint8_t readingLeft8; 
-    uint8_t readingRight8;
+    uint8_t pourcentagePwmGauche = 0;
+    uint8_t pourcentagePwmDroite = 0;
+    uint8_t lecturePhotoresistanceGauche = 0; 
+    uint8_t lecturePhotoresistanceDroite = 0;
+    uint8_t lectureDistance = lectureCan(PA1);
 
-    uint16_t lectureDistance = can.lecture(PA2);
-    uint8_t lectureDistance8Bit = lectureDistance >> 2;
-    while (lectureDistance8Bit < 20) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
-        readingLeft = can.lecture(PA4);
-        readingRight = can.lecture(PA6);
-        readingLeft8 = (readingLeft >> 2) ; // takes out the 2 LSB
-        readingRight8 = (readingRight >> 2) ;
-        if (readingLeft8 <= intensiteLampe)
-            pourcentageLeft = 0;
+    while (lectureDistance <= 50 | lectureDistance > 63) { // 30 est une valeur arbitraire (sert a voir si on est pres d'un mur)
+        lecturePhotoresistanceGauche = lectureCan(PA4);
+        lecturePhotoresistanceDroite = lectureCan(PA6);
+        if (lecturePhotoresistanceGauche <= intensiteLampe)
+            pourcentagePwmGauche = 0;
+
         else 
-            pourcentageLeft  = (readingLeft8 - intensiteLampe) * 100 / (255 - intensiteLampe);
+            pourcentagePwmGauche  = (lecturePhotoresistanceGauche - intensiteLampe) * POURCENTAGE / (PWM_MAXIMAL - intensiteLampe);
         
-        if (readingRight8 <= intensiteLampe)
-            pourcentageRight = 0;
+        if (lecturePhotoresistanceDroite <= intensiteLampe)
+            pourcentagePwmDroite = 0;
+
         else
-            pourcentageRight = (readingRight8 - intensiteLampe) * 100 / (255 - intensiteLampe);
+            pourcentagePwmDroite = (lecturePhotoresistanceDroite - intensiteLampe) * POURCENTAGE / (PWM_MAXIMAL - intensiteLampe);
 
-        moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-        uint16_t lectureDistance = can.lecture(PA2);
-        uint8_t lectureDistance8Bit = lectureDistance >> 2;
+        moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+        lectureDistance = lectureCan(PA1);
     }
+}
 
+void faireDemiTour () {
+    Moteur moteurs = Moteur();
+    uint8_t pourcentagePwmGauche = 88;
+    uint8_t pourcentagePwmDroite = 65;
+    
+    moteurs.avancerMoteur(pourcentagePwmGauche,pourcentagePwmDroite);
+    _delay_ms(DELAI_DEMI_TOUR);
+    pourcentagePwmGauche = 0;
+    pourcentagePwmDroite = 0;
 }
