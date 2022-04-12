@@ -179,6 +179,9 @@ void suivreLumiere (int intensiteLampe) {
         else
             pourcentagePwmDroite = (lecturePhotoresistanceDroite - intensiteLampe) * POURCENTAGE / (PWM_MAXIMAL - intensiteLampe);
 
+        if (pourcentagePwmGauche >  5 & pourcentagePwmDroite <  5)
+            ; // ajouter une methode dans la classe Moteur tournerSurPlaceDroite() et tournerSurPlaceGauche()
+
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
         lectureDistance = lectureCan(PA1);
     }
