@@ -27,6 +27,9 @@ const uint8_t DELAI_BOUTON = 30;
 const uint8_t PWN_MAXIMAL = 255;
 const uint8_t POURCENTAGE = 100;
 const uint16_t DELAI_DEMI_TOUR = 5600;
+const uint16_t DELAI_DEPASER_MUR = 800;
+const uint8_t LIMITE_TOURNER_SUR_PLACE = 10;
+const uint8_t INTESITE_MINIMAL = 150;
 
 enum class Etat {
     INIT,
@@ -55,10 +58,10 @@ int main () {
         lecturePhotoresistanceDroite = lectureCan(PA6);
         sommeIntensite += lecturePhotoresistanceGauche +lecturePhotoresistanceDroite;
     }
-    uint8_t intensiteLumiere = (sommeIntensite / N_LECTURES) + 10; // + 10 pour que ca soit plus restrictive
+    uint8_t intensiteLumiere = (sommeIntensite / N_LECTURES); // Ajouter + 10  a l'intensite pour que ca soit plus restrictive ?
 
-    if (intensiteLumiere > 150)
-        intensiteLumiere = 150;
+    if (intensiteLumiere > INTESITE_MINIMAL)
+        intensiteLumiere = INTESITE_MINIMAL;
 
     while (true){
         switch (etatPresent){
@@ -84,10 +87,8 @@ int main () {
                 uint8_t lecturePhotoresistanceGauche = lectureCan(PA4);
                 uint8_t lecturePhotoresistanceDroite = lectureCan(PA6);
 
-                // if (lectureDistance > 20 & lectureDistance < 80)
-                //     etatPresent = Etat::MODE_SUIVEUR_MUR;
 
-                if (lecturePhotoresistanceGauche > (intensiteLumiere + 30) | lecturePhotoresistanceDroite > (intensiteLumiere + 30))
+                if (lecturePhotoresistanceGauche > (intensiteLumiere + 30) || lecturePhotoresistanceDroite > (intensiteLumiere + 30))
                     etatPresent = Etat::MODE_SUIVEUR_LUMIERE;
 
                 else if (estPresseD2())
@@ -130,6 +131,10 @@ void suivreMur() {
     Moteur moteurs = Moteur();
     uint8_t pourcentagePwmGauche = 58;
     uint8_t pourcentagePwmDroite = 57;
+
+    moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+    _delay_ms(DELAI_DEPASER_MUR);
+
     uint8_t lectureDistance = lectureCan(PA1);
     while (lectureDistance > 20) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
         if (lectureDistance > VINGT_CM + INTERVALLE_VINGT_CM){
@@ -163,7 +168,7 @@ void suivreLumiere (int intensiteLampe) {
     uint8_t lecturePhotoresistanceDroite = 0;
     uint8_t lectureDistance = lectureCan(PA1);
 
-    while (lectureDistance <= 50 | lectureDistance > 63) { // 63 pour une distancce de 15cm et 50 pour une distance de 25 cm.
+    while (lectureDistance <= 50 || lectureDistance > 63) { // 63 pour une distancce de 15cm et 50 pour une distance de 25 cm.
         lecturePhotoresistanceGauche = lectureCan(PA4);
         lecturePhotoresistanceDroite = lectureCan(PA6);
         if (lecturePhotoresistanceGauche <= intensiteLampe)
@@ -178,10 +183,14 @@ void suivreLumiere (int intensiteLampe) {
         else
             pourcentagePwmDroite = (lecturePhotoresistanceDroite - intensiteLampe) * POURCENTAGE / (PWM_MAXIMAL - intensiteLampe);
 
-        if (pourcentagePwmGauche >  5 & pourcentagePwmDroite <  5)
-            ; // ajouter une methode dans la classe Moteur tournerSurPlaceDroite() et tournerSurPlaceGauche()
-
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+
+        if (pourcentagePwmGauche >  LIMITE_TOURNER_SUR_PLACE && pourcentagePwmDroite <  LIMITE_TOURNER_SUR_PLACE)
+            moteurs.tournerSurPlaceGauche(pourcentagePwmGauche, pourcentagePwmGauche); 
+        
+        else if (pourcentagePwmGauche <  LIMITE_TOURNER_SUR_PLACE && pourcentagePwmDroite >  LIMITE_TOURNER_SUR_PLACE)
+            moteurs.tournerSurPlaceDroite(pourcentagePwmDroite, pourcentagePwmDroite);
+
         lectureDistance = lectureCan(PA1);
     }
 }
@@ -191,7 +200,7 @@ void faireDemiTour () {
     uint8_t pourcentagePwmGauche = 88;
     uint8_t pourcentagePwmDroite = 65;
     
-    moteurs.avancerMoteur(pourcentagePwmGauche,pourcentagePwmDroite);
+    moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
     _delay_ms(DELAI_DEMI_TOUR);
     pourcentagePwmGauche = 0;
     pourcentagePwmDroite = 0;
