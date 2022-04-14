@@ -22,6 +22,10 @@ class Moteur {
         // fait tourner uniquement la roue de gauche ce qui fait tourner le robot a droite
         void tournerDroiteMoteur(int pourcentageOC0B);
 
+        void tournerSurPlaceGauche(int pourcentageOC0A, int pourcentageOC0B);
+
+        void tournerSurPlaceDroite(int pourcentageOC0A, int pourcentageOC0B);
+
         // met le pwm a 0 ce qui arrete les moteurs
         void arreterMoteur();
 

@@ -101,6 +101,19 @@ void Moteur::tournerDroiteMoteur(int pourcentageOC0A)
     PORTB &= ~(1 << PB2);
     reglerVitesseMoteur(pourcentageOC0A, 0);
 }
+
+void Moteur::tournerSurPlaceGauche(int pourcentageOC0A, int pourcentageOC0B) {
+  PORTB &= ~(1 << PB2);
+  PORTB |= (1 << PB5);
+  reglerVitesseMoteur(pourcentageOC0A, pourcentageOC0B);
+}
+
+void Moteur::tournerSurPlaceDroite(int pourcentageOC0A, int pourcentageOC0B) {
+  PORTB &= ~(1 << PB5);
+  PORTB |= (1 << PB2);
+  reglerVitesseMoteur(pourcentageOC0A, pourcentageOC0B);
+}
+
 /****************************************************************************************************************************************************
   * Nom :         arreterMoteur
   * Description:  Methode permet d`arreter le moteurs 

@@ -48,8 +48,10 @@ Bouton::Bouton(volatile uint8_t *pin, int boutonPin){
 bool Bouton::estBoutonPresseRappel(){
     uint8_t rebond = 30;
     uint8_t masque = (1 << boutonPin_);
-    if (*pin_ & masque){
-        _delay_ms(rebond);
+    uint8_t lectureBouton1 = *pin_ & masque;
+    _delay_ms(rebond);
+    uint8_t lectureBouton2 = *pin_ & masque;
+    if (*pin_ & masque & (lectureBouton1 == lectureBouton2)){
         return true;
     }
     return false;
