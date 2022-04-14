@@ -57,8 +57,6 @@ void refaireParcours(Moteur moteurs, uint8_t adresseL)
 		adresseLecture +=UN_BYTE;
 
 		moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-		transmissionUart(pourcentageLeft);
-		transmissionUart(pourcentageRight);
 	
 }
 
