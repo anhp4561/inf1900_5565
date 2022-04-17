@@ -240,7 +240,7 @@ while (true){
         ecrireMouv = false;
     }
     char tampon[100];
-    int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
+    int n = sprintf(tampon,"pLeft : %d     pRight : %d\n" , pourcentageLeft, pourcentageRight);
     DEBUG_PRINT(tampon,n);
 }
 
