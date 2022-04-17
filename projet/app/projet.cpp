@@ -10,6 +10,7 @@
 #include "moteur.h"
 #include "debug.h"
 #include "sonnerie.h"
+#include "ecrireMouvements.h"
 
 void suivreMur();
 void suivreLumiere(int intensiteLampe);
@@ -17,6 +18,8 @@ bool estPresseD2(); // Classe Bouton ne marche pas avec Port D
 uint8_t lectureCan(uint8_t pin);
 void faireDemiTour();
 void allumerLed5hz3secondes (char couleur);
+void refaireParcours();
+void configurerTimer();
 
 const uint8_t N_ITERATIONS =10;
 const double N_LECTURES = N_ITERATIONS * 2.0;
@@ -31,19 +34,30 @@ const uint16_t DELAI_DEPASER_MUR = 800;
 const uint8_t LIMITE_TOURNER_SUR_PLACE = 50;
 const uint8_t INTESITE_MINIMAL = 180;
 
+volatile bool ecrireMouv = true;
+volatile bool enregistrer = true;
+
 enum class Etat {
     INIT,
     MODE_SUIVEUR_MUR,
     MODE_SUIVEUR_LUMIERE,
     ATTENTE,
     MODE_TOURNER,
-    FIN_PARCOURS
+    FIN_PARCOURS,
+    MODE_REPRISE
 };
 
 Etat etatPresent = Etat::INIT;
 
-int main () {
+
+
+
+int main () 
+{
     initialisationUart();
+    initialisationEcriture();
+    configurerTimer();
+
     can can;
     Led led(&PORTB, 0, 1);
     Bouton boutonBlanc (&PINA,0);
@@ -70,7 +84,8 @@ int main () {
                 if (estPresseD2()){
                     allumerLed5hz3secondes('v');
                     etatPresent = Etat::MODE_SUIVEUR_MUR;
-                }
+                } else if (boutonBlanc.estBoutonPresseTirage())
+                    etatPresent = Etat::MODE_REPRISE;
                 break;
 
             case Etat::MODE_SUIVEUR_MUR:
@@ -99,14 +114,21 @@ int main () {
 
                 else if (boutonBlanc.estBoutonPresseTirage())
                     etatPresent = Etat::MODE_TOURNER;
+
                 break;
                 }
 
             case Etat::MODE_TOURNER:
+                enregistrer = false;
                 led.allumerVertLed();
                 faireDemiTour();
                 led.eteindreLed();
                 etatPresent = Etat::MODE_SUIVEUR_MUR;
+                break;
+
+            case Etat::MODE_REPRISE:
+                refaireParcours();
+                etatPresent = Etat::FIN_PARCOURS;
                 break;
 
             case Etat::FIN_PARCOURS:
@@ -151,6 +173,13 @@ void suivreMur() {
             pourcentagePwmDroite = 57;
         }
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+        if (ecrireMouv) 
+        {
+            ecrireEnMemoire(pourcentagePwmGauche, pourcentagePwmDroite);
+            ecrireMouv = false;
+            transmissionUart(pourcentagePwmGauche);
+            transmissionUart(pourcentagePwmDroite);
+        }
         lectureDistance = lectureCan(PA1);
         char tampon4[50];
         int n4 = sprintf(tampon4,"La distance sur 255 est :  %d  \n", lectureDistance);
@@ -223,7 +252,13 @@ void suivreLumiere (int intensiteLampe) {
             pourcentageRight = (readingRight8 - intensiteLampe) * 100 / (255 - intensiteLampe);
 
         moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-
+        if (ecrireMouv) 
+        {
+            ecrireEnMemoire(pourcentageLeft, pourcentageRight);
+            ecrireMouv = false;
+            transmissionUart(pourcentageLeft);
+            transmissionUart(pourcentageRight);
+        }
 
         // if (pourcentagePwmGauche >  LIMITE_TOURNER_SUR_PLACE && pourcentagePwmDroite <  LIMITE_TOURNER_SUR_PLACE)
         //     moteurs.tournerSurPlaceGauche(pourcentagePwmGauche, pourcentagePwmGauche); 
@@ -265,3 +300,58 @@ void allumerLed5hz3secondes (char couleur) {
         } 
     }             
 }
+
+ISR(TIMER1_COMPA_vect)
+{
+    if (enregistrer) {
+        ecrireMouv = true;
+    }
+}
+
+void configurerTimer() {
+    
+    cli();
+    TCNT1 = 0; // sets the timer to 0
+    TCCR1A = 0; // We don't need OCnA or OCnB here (not generating PWM or outputting something when output compare) (WGM11 and WGM10 = 0, since we want CTC mode)
+    // for CTC mode - > WGM13 WGM12 WGM11 WGM10  = 0 1 0 0 
+    TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10); // CTC mode and (CS12 and CS10 = 1, since we want /1024 prescalor)
+    // for 1024 prescalor -> CS12 CS11 CS10 = 1 0 1
+    TIMSK1 = (1 << OCIE1A); // Timer/Counter 1 output compare match A enabled
+    OCR1A = 781; // where we compare timer 1
+    sei();
+}
+
+void refaireParcours() {
+    moteurs.arreterMoteur();
+    _delay_ms(1000);
+    uint8_t adresseLecture = 0x00;
+    uint8_t adresseEcriture = getAdresseEcriture();
+    uint8_t pourcentageGauche;
+    uint8_t pourcentageDroite;
+    while(adresseLecture < adresseEcriture) 
+	{
+        pourcentageGauche = getMemoire(adresseLecture);
+        adresseLecture += 0x01;
+        pourcentageDroite = getMemoire(adresseLecture);
+        adresseLecture += 0x01;
+
+        moteurs.avancerMoteur(pourcentageGauche, pourcentageDroite);
+
+        /*
+        if (pourcentageGauche > 110) 
+        {
+            pourcentageGauche -= 120;
+            moteurs.tournerSurPlaceGauche(pourcentageGauche, pourcentageDroite);
+        } else if (pourcentageDroite > 110) 
+        {
+            pourcentageDroite -= 120;
+            moteurs.tournerSurPlaceGauche(pourcentageGauche, pourcentageDroite);
+        } else {
+            moteurs.avancerMoteur(pourcentageGauche, pourcentageDroite);
+        }
+        */
+
+        _delay_ms(100);     
+    }
+    moteurs.arreterMoteur();
+} 

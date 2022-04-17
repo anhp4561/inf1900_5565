@@ -2,7 +2,7 @@
 #include <avr/io.h> 
 #include <util/delay.h>
 #include <stdio.h>
-#include <avr/interrupt.h>
+#include <avr/interrupt.h>: Interrupts
 #include <can.h>
 #include "led.h"
 #include "rs232.h"
@@ -12,40 +12,55 @@
 #include "sonnerie.h"
 #include "interruptions.h"
 #include "ecrireMouvements.h"
+#include "timer.h"
 
 Moteur moteurs = Moteur();
 
 volatile bool basculeTimer = false;
 volatile bool ecrireMouv = true;
+volatile bool enregistrer = true;
+const int PRESCALER = 1024;
+uint8_t pourcentageLeft;
+uint8_t pourcentageRight;
+uint8_t timerMode = 2;
 
 Led led (&PORTA,0,1);
 
-// ISR(TIMER1_COMPA_vect)
-// {
-//     PORTD = basculeTimer ? 0 : 1; // a ameliorer plus tard
-//     basculeTimer = !basculeTimer;
 
-//     TIFR1 |= (1 << OCF1A);
-// }
+ISR(TIMER1_COMPA_vect)
+{
+    ecrireMouv = true;
+}
 
-// ISR ( INT0_vect ) {
 
-// ecrireMouv = false;
-// refaireParcours(moteurs);
+void initialiserInterruption()
+{
+    //initialiser l'interruption du bouton pour refaire les mouvements
+    initInterruption0();
+}
 
-// }
 
-// void initialiserInterruption()
-// {
-//     DDRD = 0x00; // PORT D est en mode entrée
-//     //initialiser l'interruption du bouton pour refaire les mouvements
-//     initInterruption0();
-// }
+void configurerTimer() {
+    
+    cli();
+    TCNT1 = 0; // sets the timer to 0
+    TCCR1A = 0; // We don't need OCnA or OCnB here (not generating PWM or outputting something when output compare) (WGM11 and WGM10 = 0, since we want CTC mode)
+    // for CTC mode - > WGM13 WGM12 WGM11 WGM10  = 0 1 0 0 
+    TCCR1B = (1 << WGM12) | (1 << CS12) | (1 << CS10); // CTC mode and (CS12 and CS10 = 1, since we want /1024 prescalor)
+    // for 1024 prescalor -> CS12 CS11 CS10 = 1 0 1
+    TIMSK1 = (1 << OCIE1A); // Timer/Counter 1 output compare match A enabled
+    OCR1A = 781; // where we compare timer 1
+    sei();
+    
+}
+
 
 int main() {
 
-//initialiserInterruption();
-
+initialiserInterruption();
+initialisationUart();
+initialisationEcriture();
+configurerTimer();
 // tester Bouton et Led
 #if false 
     Led led (&PORTA,0,1);
@@ -177,7 +192,6 @@ transmissionUartString(mots);
 DDRB = 0xff;
 DDRA = 0x00;
 can converter = can();
-initialisationUart();
 uint16_t readingLeft = converter.lecture(PA4);
 uint16_t readingRight = converter.lecture(PA6);
 uint8_t readingLeft8 = readingLeft >> 2 ; // takes out the 2 LSB 
@@ -185,8 +199,8 @@ uint8_t readingRight8 = readingRight >> 2 ;
 int sommeIntensite = 0;
 uint8_t nIterations = 10;
 double nLectures = nIterations * 2.0;
-uint8_t pourcentageLeft = 0;
-uint8_t pourcentageRight = 0;
+pourcentageLeft = 0;
+pourcentageRight = 0;
 
 for (int i = 0; i < nIterations ; i++){
     readingLeft = converter.lecture(PA4);
@@ -218,37 +232,34 @@ while (true){
         pourcentageRight = (readingRight8 - intensiteLumiere) * 100 / (255 - intensiteLumiere);
 
     moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-    // if (ecrireMouv) 
-    // {
-    //     ecrireEnMemoire(pourcentageLeft, pourcentageRight);
-    // }
+    if (ecrireMouv) 
+    {
+        ecrireEnMemoire(pourcentageLeft, pourcentageRight);
+        transmissionUart(pourcentageLeft);
+	    transmissionUart(pourcentageRight);
+        ecrireMouv = false;
+    }
     char tampon[100];
-    int n = sprintf(tampon,"pLeft : %d     pRight : %d\n", pourcentageLeft, pourcentageRight);
+    int n = sprintf(tampon,"pLeft : %d     pRight : %d\n" , pourcentageLeft, pourcentageRight);
     DEBUG_PRINT(tampon,n);
 }
 
 #endif
 
 #if true
-<<<<<<< HEAD
 can converter = can();
 const uint8_t VINGT_CM = 58;
-uint8_t pourcentagePwmGauche = 53;
-uint8_t pourcentagePwmDroite = 50;
-=======
 Moteur moteurs = Moteur();
 can converter = can();
 const uint8_t VINGT_CM = 58;
 uint8_t pourcentagePwmGauche = 55;
 uint8_t pourcentagePwmDroite = 53;
->>>>>>> d4bb6d936c5dcfb3a2431943ab7809e830daab14
 while (true){
     uint16_t lectureDistance = converter.lecture(PA2);
     uint8_t lectureDistance8Bit = lectureDistance >> 2;
     char tampon1[100];
     int n1 = sprintf(tampon1,"La distance sur 255 est :  %d  \n", lectureDistance8Bit);
     DEBUG_PRINT(tampon1,n1);
-<<<<<<< HEAD
     if (lectureDistance8Bit > VINGT_CM+3){
         pourcentagePwmGauche = 0;
     }
@@ -258,7 +269,6 @@ while (true){
     else {
         pourcentagePwmGauche = 53;
         pourcentagePwmDroite = 50;
-=======
     if (lectureDistance8Bit > (VINGT_CM+3)){
         pourcentagePwmGauche = 0;
     }
@@ -268,9 +278,8 @@ while (true){
     else {
         pourcentagePwmGauche = 55;
         pourcentagePwmDroite = 53;
->>>>>>> d4bb6d936c5dcfb3a2431943ab7809e830daab14
     }
-    moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+    moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
     // if (lectureDistance8Bit >  3 + VINGT_CM){ // 5,  100 et 500 valeur aleatoire
     //     moteurs.tournerGaucheMoteur(80);
     //     _delay_ms(600);
@@ -287,18 +296,15 @@ while (true){
     //     moteurs.arreterMoteur();
     // }
     // else // dans l'intervalle
-    //     moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
+    //     moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
 }
 
 #endif
 
 #if false
 
-DDRA = 0x00;
-PORTA = 0x01;
 uint8_t g = 255;
 uint8_t d = 255;
-initialisationEcriture();
 for (int i=0; i < 20; i++) {
     if (ecrireMouv) {
 moteurs.avancerMoteur(g, d);
@@ -338,5 +344,28 @@ while (true) {
     DEBUG_PRINT(tampon1,n1);
  }
 #endif
+
+}
+
+void refaireMouvements() {
+    moteurs.arreterMoteur();
+    _delay_ms(1000);
+    uint8_t adresseLecture = 0x00;
+    uint8_t adresseEcriture = getAdresseEcriture();
+    while(adresseLecture < adresseEcriture) 
+	{
+        uint8_t g = getMemoire(adresseLecture);
+        adresseLecture += 0x01;
+        uint8_t d = getMemoire(adresseLecture);
+        adresseLecture += 0x01;
+        moteurs.avancerMoteur(g, d);
+        _delay_ms(100);
+    }
+    moteurs.arreterMoteur();
+}
+
+ISR ( INT0_vect ) {
+
+    refaireMouvements();
 
 }

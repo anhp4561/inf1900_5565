@@ -37,31 +37,6 @@ void ecrireEnMemoire(uint8_t pourcentageLeft, uint8_t pourcentageRight)
 	_delay_ms(5);
 	}
 
-void refaireParcours(Moteur moteurs, uint8_t adresseL) 
-{	
-	uint8_t adresseLecture = adresseL;
-	uint8_t pourcentageLeft;
-	uint8_t pourcentageRight;
-
-	/*
-	for(int i = 0; i < 40; i++) {
-	notreMemoire.lecture(i, &donneeLecture);
-	transmissionUart(donneeLecture);
-	}
-	*/
-
-	
-		notreMemoire.lecture(adresseLecture, &pourcentageLeft);
-		adresseLecture +=UN_BYTE;
-    	notreMemoire.lecture(adresseLecture, &pourcentageRight);
-		adresseLecture +=UN_BYTE;
-
-		moteurs.avancerMoteur(pourcentageLeft, pourcentageRight);
-		transmissionUart(pourcentageLeft);
-		transmissionUart(pourcentageRight);
-	
-}
-
 uint8_t getAdresseEcriture() {
 	return adresseEcriture;
 }
