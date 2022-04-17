@@ -86,7 +86,8 @@ int main ()
                 if (estPresseD2()){
                     allumerLed5hz3secondes('v');
                     etatPresent = Etat::MODE_SUIVEUR_MUR;
-                }
+                } else if (boutonBlanc.estBoutonPresseTirage())
+                    etatPresent = Etat::MODE_REPRISE;
                 break;
 
             case Etat::MODE_SUIVEUR_MUR:
@@ -111,14 +112,8 @@ int main ()
                 else if (estPresseD2())
                     etatPresent = Etat::FIN_PARCOURS;
 
-                else if (boutonBlanc.estBoutonPresseTirage()) {
-                    if (!(uTurnFait)){
-                        uTurnFait = true;
-                        etatPresent = Etat::MODE_TOURNER;
-                    } else {
-                        etatPresent = Etat::MODE_REPRISE;
-                    }
-                }
+                else if (boutonBlanc.estBoutonPresseTirage())
+                    etatPresent = Etat::MODE_TOURNER;
 
                 break;
                 }
