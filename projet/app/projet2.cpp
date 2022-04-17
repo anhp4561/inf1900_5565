@@ -60,8 +60,8 @@ int main () {
     uint8_t intensiteLumiereGauche = (sommeIntensiteGauche / N_ITERATIONS) + 10; 
     uint8_t intensiteLumiereDroite = (sommeIntensiteDroite / N_ITERATIONS) + 10; 
 
-    if (intensiteLumiereGauche < 140 || intensiteLumiereDroite < 140)
-        intensiteLumiereGauche = intensiteLumiereDroite = 140;
+    if (intensiteLumiereGauche < 180 || intensiteLumiereDroite < 180)
+        intensiteLumiereGauche = intensiteLumiereDroite = 180;
 
     else if (intensiteLumiereGauche > 255 || intensiteLumiereDroite > 255)
         intensiteLumiereGauche = intensiteLumiereDroite = 140;
@@ -133,8 +133,8 @@ uint8_t lectureCan(uint8_t pin){
 void suivreMur() {
     can can;
     Moteur moteurs = Moteur();
-    uint8_t pourcentagePwmGauche = 58;
-    uint8_t pourcentagePwmDroite = 57;
+    uint8_t pourcentagePwmGauche = 54;
+    uint8_t pourcentagePwmDroite = 53;
     uint8_t lectureDistance = lectureCan(PA1);
     while (/*lectureDistance > 20*/!estPresseD2()) { // 20 est une valeur arbitraire (sert a voir si on est pres d'un mur)
         if (lectureDistance > VINGT_CM + INTERVALLE_VINGT_CM){
@@ -144,8 +144,8 @@ void suivreMur() {
             pourcentagePwmDroite = 0;
         }
         else {
-            pourcentagePwmGauche = 58;
-            pourcentagePwmDroite = 57;
+            pourcentagePwmGauche = 54;
+            pourcentagePwmDroite = 53;
         }
         moteurs.avancerMoteur(pourcentagePwmGauche, pourcentagePwmDroite);
         lectureDistance = lectureCan(PA1);
@@ -165,7 +165,7 @@ void suivreLumiere (int intensiteLumiereGauche, int intensiteLumiereDroite) {
     uint8_t pourcentageLeft = 0;
     uint8_t pourcentageRight = 0;
 
-    while (true){
+    while (true/*lectureDistance <= 50 || lectureDistance > 63*/){
         lecturePhotoresistanceGauche = lectureCan(PA4);
         lecturePhotoresistanceDroite = lectureCan(PA6);
         if (lecturePhotoresistanceGauche <= intensiteLumiereGauche)
@@ -201,14 +201,19 @@ void suivreLumiere (int intensiteLumiereGauche, int intensiteLumiereDroite) {
 }
 
 void faireDemiTour () {
+    _delay_ms(1000);
     Moteur moteurs = Moteur();
+    Led led(&PORTB, 0, 1);
     uint8_t pourcentagePwmGauche = 88;
     uint8_t pourcentagePwmDroite = 65;
     
     moteurs.avancerMoteur(pourcentagePwmGauche,pourcentagePwmDroite);
-    _delay_ms(DELAI_DEMI_TOUR);
-    pourcentagePwmGauche = 0;
-    pourcentagePwmDroite = 0;
+    for (int i = 0; i < 500 ; i++){
+        led.allumerRougeLed();
+        _delay_ms(5);
+        led.allumerVertLed();
+        _delay_ms(5);
+    }
 }
 
 void allumerLed5hz3secondes (char couleur) {
